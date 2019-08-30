@@ -51,3 +51,16 @@ def insertion_sort(sort_list, list_print = False):
 			print('loop:{0} list:{1}'.format(i, sort_list))
 
 	return sort_list
+
+import heapq
+def heap_sort(sort_list, list_print = False):
+	heapq.heapify(sort_list)
+	sorted_list = []
+	for i in range(len(sort_list)):
+		sorted_list.append(sort_list[0])
+		heapq.heappop(sort_list)
+
+		if list_print:
+			print('loop:{0} list:{1}'.format(i, sorted_list))
+	
+	return sorted_list
