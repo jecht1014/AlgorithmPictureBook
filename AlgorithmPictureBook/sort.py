@@ -1,3 +1,4 @@
+import copy
 def replace_list(l, i, j):
 	tmp = l[i]
 	l[i] = l[j]
@@ -5,7 +6,8 @@ def replace_list(l, i, j):
 	return l
 
 #バブルソート
-def bubble_sort(sort_list, list_print = False):
+def bubble_sort(l, list_print = False):
+	sort_list = copy.deepcopy(l)
 	for i in range(len(sort_list)-1):
 		for j in range(len(sort_list) - 1 - i):
 			if sort_list[j] > sort_list[j+1]:
@@ -17,7 +19,8 @@ def bubble_sort(sort_list, list_print = False):
 	return sort_list
 
 #選択ソート
-def selection_sort(sort_list, list_print = False):
+def selection_sort(l, list_print = False):
+	sort_list = copy.deepcopy(l)
 	for i in range(len(sort_list)-1):
 		min = sort_list[i]
 		argmin = i
@@ -33,7 +36,8 @@ def selection_sort(sort_list, list_print = False):
 	return sort_list
 
 #挿入ソート
-def insertion_sort(sort_list, list_print = False):
+def insertion_sort(l, list_print = False):
+	sort_list = copy.deepcopy(l)
 	for i in range(len(sort_list)):
 		if i != 0:
 			if sort_list[i] < sort_list[i-1]:
@@ -54,7 +58,8 @@ def insertion_sort(sort_list, list_print = False):
 
 #ヒープソート
 import heapq
-def heap_sort(sort_list, list_print = False):
+def heap_sort(l, list_print = False):
+	sort_list = copy.deepcopy(l)
 	heapq.heapify(sort_list)
 	sorted_list = []
 	for i in range(len(sort_list)):
@@ -89,7 +94,8 @@ def merge_sort_merge(left_l, right_l, list_print):
 	return merge_l
 
 import math
-def merge_sort(sort_list, list_print = False):
+def merge_sort(l, list_print = False):
+	sort_list = copy.deepcopy(l)
 	mid = int(len(sort_list) / 2)
 	if list_print:
 		print(sort_list[:mid], sort_list[mid:])
