@@ -37,7 +37,7 @@ def insertion_sort(sort_list, list_print = False):
 	for i in range(len(sort_list)):
 		if i != 0:
 			if sort_list[i] < sort_list[i-1]:
-				for j in reversed(i)):
+				for j in reversed(range(i)):
 					if j != 0:
 						if sort_list[j-1] < sort_list[i]:
 							sort_list.insert(j, sort_list[i])
