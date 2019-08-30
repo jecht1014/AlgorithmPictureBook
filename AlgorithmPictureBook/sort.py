@@ -52,6 +52,7 @@ def insertion_sort(sort_list, list_print = False):
 
 	return sort_list
 
+#ヒープソート
 import heapq
 def heap_sort(sort_list, list_print = False):
 	heapq.heapify(sort_list)
@@ -64,3 +65,41 @@ def heap_sort(sort_list, list_print = False):
 			print('loop:{0} list:{1}'.format(i, sorted_list))
 	
 	return sorted_list
+
+#マージソート
+def merge_sort_merge(left_l, right_l, list_print):
+	merge_l = []
+	while((len(left_l) == 0 and len(right_l) == 0) is not True):
+		if len(right_l) == 0:
+			merge_l.append(left_l[0])
+			left_l.pop(0)
+		elif len(left_l) == 0:
+			merge_l.append(right_l[0])
+			right_l.pop(0)
+		elif left_l[0] < right_l[0]:
+			merge_l.append(left_l[0])
+			left_l.pop(0)
+		else:
+			merge_l.append(right_l[0])
+			right_l.pop(0)
+	
+	if list_print:
+		print(merge_l)
+	
+	return merge_l
+
+import math
+def merge_sort(sort_list, list_print = False):
+	mid = int(len(sort_list) / 2)
+	if list_print:
+		print(sort_list[:mid], sort_list[mid:])
+	if(len(sort_list[:mid]) != 1):
+		left = merge_sort(sort_list[:mid], list_print)
+	else:
+		left = sort_list[:mid]
+	if(len(sort_list[mid:]) != 1):
+		right = merge_sort(sort_list[mid:], list_print)
+	else:
+		right = sort_list[mid:]
+
+	return merge_sort_merge(left, right, list_print)
