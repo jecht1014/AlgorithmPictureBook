@@ -109,3 +109,36 @@ def merge_sort(l, list_print = False):
 		right = sort_list[mid:]
 
 	return merge_sort_merge(left, right, list_print)
+
+def quick_sort(l, list_print = False):
+	sort_list = copy.deepcopy(l)
+	pivot = sort_list[0]
+
+	left = []
+	right = []
+	
+	if len(sort_list) == 1:
+		return sort_list
+
+	for num in sort_list[1:]:
+		if num < pivot:
+			left.append(num)
+		else:
+			right.append(num)
+
+	if list_print:
+		print(left, pivot, right)
+
+	if len(left) > 0:
+		left = quick_sort(left, list_print = list_print)
+	if len(right) > 0:
+		right = quick_sort(right, list_print = list_print)
+
+	if list_print:
+		print(left, pivot, right)
+
+	sorted_list = left
+	sorted_list.append(pivot)
+	if len(right) > 0:
+		sorted_list.extend(right)
+	return sorted_list

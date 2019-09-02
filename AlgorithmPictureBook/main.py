@@ -6,7 +6,7 @@ import random
 import sys
 sys.setrecursionlimit(100000)
 
-l = list(range(1000))
+l = list(range(3000))
 random.shuffle(l)
 
 start_time = time.time()
@@ -28,4 +28,8 @@ print('time:{0:.3f}'.format(time.time()-start_time))
 start_time = time.time()
 sorted_list = sort.merge_sort(l)
 #print(sorted_list)
+print('time:{0:.3f}'.format(time.time()-start_time))
+
+start_time = time.time()
+sorted_list = sort.quick_sort(l)
 print('time:{0:.3f}'.format(time.time()-start_time))
