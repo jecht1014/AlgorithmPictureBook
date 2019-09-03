@@ -58,12 +58,18 @@ def x_to_function(x):
     return x5
 
 def linear_regression2d_plot(w, n = 10):
-    x = np.random.normal(0, 1, (n, 1))
-    phi = x_to_function(x)
-    epsilon = np.random.normal(0, 0.1, n)
+    x1 = np.random.normal(0, 3, (n, 1))
+    phi = x_to_function(x1)
+    epsilon = np.random.normal(0, 1, n)
     y = np.dot(phi, w) + epsilon
 
-    plt.scatter(np.sum(phi, axis = 1), y.T)
+    x2 = np.arange(-6.0, 6.0, 0.5)
+    x2 = np.reshape(x2, (x2.shape[0], 1))
+    phi2 = x_to_function(x2)
+    y2 = np.dot(phi2, w)
+
+    plt.scatter(x1, y)
+    plt.plot(x2, y2)
     plt.show()
 
 '''
@@ -74,5 +80,5 @@ w = np.array([[0.5, 1, 1]]).T
 multiple_regression3d_plot(w, n = 10)
 '''
 
-w = np.array([0.5, 2, 0.5, 0.5, 1])
+w = np.array([1, 6, -1, 2, -1])
 linear_regression2d_plot(w)
