@@ -24,7 +24,7 @@ def simple_regression_plot(a, b, n = 10):
     plt.legend(['real', 'prediction'])
     plt.show()
 
-def multiple_regression3d_plot(w, n = 10)
+def multiple_regression3d_plot(w, n = 10):
     x = np.random.normal(0, 1, (n, 2))
     x_1 = np.ones((n, 1))
     X = np.hstack((x_1, x))
@@ -36,8 +36,8 @@ def multiple_regression3d_plot(w, n = 10)
     x2_1, x2_2 = np.meshgrid(x2_1, x2_2)
     y2 = w[0, 0] + w[1, 0] * x2_1 + w[2, 0] * x2_2
 
-
-    y3 = prediction_w[prediction_w = multiple_regression(X, y)0, 0] + prediction_w[1, 0] * x2_1 + prediction_w[2, 0] * x2_2
+    prediction_w = multiple_regression(X, y)
+    y3 = prediction_w[0, 0] + prediction_w[1, 0] * x2_1 + prediction_w[2, 0] * x2_2
 
     fig = plt.figure()
     ax = Axes3D(fig)
@@ -49,6 +49,23 @@ def multiple_regression3d_plot(w, n = 10)
     ax.plot(x[:, 0], x[:, 1], y[0, :], marker = 'o', linestyle = 'None')
     plt.show()
 
+def x_to_function(x):
+    x1 = np.ones_like(x)
+    x2 = np.hstack((x1, x))
+    x3 = np.hstack((x2, np.square(x)))
+    x4 = np.hstack((x3, np.sin(x)))
+    x5 = np.hstack((x4, np.cos(x)))
+    return x5
+
+def linear_regression2d_plot(w, n = 10):
+    x = np.random.normal(0, 1, (n, 1))
+    phi = x_to_function(x)
+    epsilon = np.random.normal(0, 0.1, n)
+    y = np.dot(phi, w) + epsilon
+
+    plt.scatter(np.sum(phi, axis = 1), y.T)
+    plt.show()
+
 '''
 a = 1
 b = 1
@@ -56,3 +73,6 @@ simple_regression_plot(a, b, n = 10)
 w = np.array([[0.5, 1, 1]]).T
 multiple_regression3d_plot(w, n = 10)
 '''
+
+w = np.array([0.5, 2, 0.5, 0.5, 1])
+linear_regression2d_plot(w)
