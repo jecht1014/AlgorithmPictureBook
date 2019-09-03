@@ -83,7 +83,12 @@ b = 1
 simple_regression_plot(a, b, n = 10)
 w = np.array([[0.5, 1, 1]]).T
 multiple_regression3d_plot(w, n = 10)
-'''
 
 w = np.array([1, 6, -1, 2, -1])
 linear_regression2d_plot(w)
+'''
+
+X = np.array([[1, 2, 4], [1, 3, 6.1], [1, 4, 7.9]])
+y = np.array([[3], [5], [8]])
+w = ridge_regression(X, y)
+print(w)

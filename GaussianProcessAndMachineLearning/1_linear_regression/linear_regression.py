@@ -14,3 +14,7 @@ def multiple_regression(X, y):
 def linear_regression(phi, y):
     w = np.dot(np.dot(np.linalg.inv(np.dot(phi.T, phi)), phi.T), y)
     return w
+
+def ridge_regression(X, y, alfa = 0.1):
+    w = np.dot(np.dot(np.linalg.inv(np.dot(X.T, X) + alfa * np.eye(np.dot(X.T, X).shape[0])), X.T), y)
+    return w
