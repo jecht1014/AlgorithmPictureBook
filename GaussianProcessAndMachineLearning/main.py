@@ -68,8 +68,13 @@ def linear_regression2d_plot(w, n = 10):
     phi2 = x_to_function(x2)
     y2 = np.dot(phi2, w)
 
+    prediction_w = linear_regression(phi, y)
+    y3 = np.dot(phi2, prediction_w)
+    print(prediction_w)
+    
     plt.scatter(x1, y)
     plt.plot(x2, y2)
+    plt.plot(x2, y3)
     plt.show()
 
 '''
