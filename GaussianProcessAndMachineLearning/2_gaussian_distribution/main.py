@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from gaussian_distribution import *
 
 
@@ -17,7 +18,32 @@ def box_muller_plot(n, mu = 0, sigma2 = 1):
     plt.hist(x)
     plt.show()
 
+def multivariate_gaussian_probability_density_plot3d():
+    x1_1 = np.arange(-2.0, 2.0, 0.1)
+    x1_2 = np.arange(-2.0, 2.0, 0.1)
+    x1_1, x1_2 = np.meshgrid(x1_1, x1_2)
+    s = x1_1.shape
+    x2_1 = np.reshape(x1_1, (1, s[0] * s[1]))
+    x2_2 = np.reshape(x1_2, (1, s[0] * s[1]))
+    x = np.vstack([x2_1, x2_2])
+    mu = np.array([[0], [0]])
+    sigma = np.array([[1, 0], [0, 1]])
+    n = np.array([])
+    for i in range(x.shape[1]):
+        n = np.append(n, multivariate_gaussian_probability_density(np.reshape(x[:, i], (2, 1)), mu, sigma))
+    n = np.reshape(n, s)
+
+    fig = plt.figure()
+    ax = Axes3D(fig)
+    ax.set_xlabel('x1')
+    ax.set_ylabel('x2')
+    ax.set_zlabel('n')
+    ax.plot_wireframe(x1_1, x1_2, n)
+    plt.show()
+    
 '''
 gaussian_probability_density_plot()
 box_muller_plot(10000)
 '''
+
+multivariate_gaussian_probability_density_plot3d()
