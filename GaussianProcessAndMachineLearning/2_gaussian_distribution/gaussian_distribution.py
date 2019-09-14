@@ -21,3 +21,10 @@ def mvnrnd(sigma):
         r = np.append(r, box_muller())
     y = np.reshape(np.dot(l, r), (sigma.shape[0], 1))
     return y
+
+# ガウスカーネル関数
+def gbf(x, theta1 = 1, theta2 = 1):
+    print(x.shape)
+    x2 = np.tile(x.T, (x.shape[0], 1))
+    k = theta1 * np.exp(-np.power(x2 - x, 2) / theta2)
+    print(k)
