@@ -23,7 +23,7 @@ def mvnrnd(sigma):
     return y
 
 # ガウスカーネル関数
-def gbf(x, theta1 = 1, theta2 = 1):
+def rbf(x, theta1 = 1, theta2 = 1):
     x2 = np.tile(x.T, (x.shape[0], 1))
     k = theta1 * np.exp(-np.power(x2 - x, 2) / theta2)
     return k
