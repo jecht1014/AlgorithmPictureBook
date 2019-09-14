@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from mpl_toolkits.mplot3d import Axes3D
 from gaussian_distribution import *
 
@@ -40,10 +41,22 @@ def multivariate_gaussian_probability_density_plot3d():
     ax.set_zlabel('n')
     ax.plot_wireframe(x1_1, x1_2, n)
     plt.show()
+
+def gbf_plot():
+    x = np.arange(0, 5, 0.2) + 1
+    x2 = np.reshape(x, (x.shape[0], 1))
+    k = gbf(x2)
+    r = np.reshape(mvnrnd(k), (x.shape[0]))
+    
+    plt.subplot(1,2,1)
+    plt.plot(x, r.T)
+    plt.subplot(1,2,2)
+    plt.imshow(k, cmap = 'Greys')
+    plt.show()
     
 '''
 gaussian_probability_density_plot()
 box_muller_plot(10000)
-'''
-
 multivariate_gaussian_probability_density_plot3d()
+'''
+gbf_plot()
