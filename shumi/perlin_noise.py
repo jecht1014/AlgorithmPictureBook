@@ -39,10 +39,17 @@ def set_perlin_noise(n = 5, plot_judge = False):
 
     return y
 
-def waveletf2d(a = None):
-    u = np.lnispace(-1, 1, 51)
-    v = np.linspace(-1, 1, 51)
-    u, v = np.meshgrid(u, v)
+def waveletf2d(a = True):
+    x = np.linspace(-1, 1, 51)
+    y = np.linspace(-1, 1, 51)
+    x, y = np.meshgrid(x, y)
+
+    c1 = new_waveletf(x, a)
+    c2 = new_waveletf(y, a)
+
+    z = c1 * c2 * (np.random.normal(0, 3, 1)*x + np.random.normal(0, 3, 1)*y)
+
+    return z
 
 def plot_waveletf():
     x = np.linspace(-1, 1, 50)
@@ -61,4 +68,18 @@ def perlin_noise_plot():
     plt.plot(np.linspace(0, 1, 26), y_left[25:] + y_right[:26])
     plt.show()
 
+def plot_wavelet3d():
+    u = np.linspace(-1, 1, 51)
+    v = np.linspace(-1, 1, 51)
+    u, v = np.meshgrid(u, v)
+    y = waveletf2d()
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    surf = ax.plot_surface(u, v, y, cmap='bwr', linewidth=0)
+    fig.colorbar(surf)
+    ax.set_title("Surface Plot")
+    plt.show()
+
 #a = set_perlin_noise(10, True)
+plot_wavelet3d()
