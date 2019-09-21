@@ -46,6 +46,28 @@ def waveletf2d(x, y, a = True):
     z = c1 * c2 * (np.random.normal(0, 3, 1)*x + np.random.normal(0, 3, 1)*y)
     return z
 
+def set_perlin_noise2d(n = 2, plot_judge = False):
+    sep = 51
+    u = np.linspace(-1, 1, sep)
+    v = np.linspace(-1, 1, sep)
+    u, v = np.meshgrid(u, v)
+    z = np.zeros(((n+1) * int(sep/2) + 1, (n+1) * int(sep/2) + 1))
+
+    for i in range(n):
+        for j in range(n):
+            z[i*int(sep/2):i*int(sep/2)+sep, j*int(sep/2):j*int(sep/2)+sep] += waveletf2d(u, v)
+
+            if i % 50 == 0 and j % 50 == 0:
+                print(i, j)
+
+    x = np.linspace(0, n-1, int(sep/2) * (n-1) + 1)
+    y = np.linspace(0, n-1, int(sep/2) * (n-1) + 1)
+    x, y = np.meshgrid(x, y)
+
+    plt.pcolormesh(x, y, z[int(sep/2):int(sep/2) * n + 1, int(sep/2):int(sep/2) * n + 1], cmap='Greys')
+    plt.colorbar(orientation="vertical")
+    plt.show()
+
 def plot_waveletf():
     x = np.linspace(-1, 1, 50)
     parlin_noise = new_waveletf(x)
@@ -107,4 +129,4 @@ def plot_perlin_noise2d():
     plt.show()
 
 #a = set_perlin_noise(10, True)
-plot_perlin_noise2d()
+set_perlin_noise2d(100)
