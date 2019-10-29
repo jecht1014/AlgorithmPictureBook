@@ -1,3 +1,4 @@
+# chapter1
 import numpy as np
 
 def simple_regression(xn, yn):

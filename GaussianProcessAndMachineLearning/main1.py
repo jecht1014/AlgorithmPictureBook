@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-#from linear_regression import *
-from linear_regression import *
+from gaussian_def.linear_regression import *
 
 def simple_regression_plot(a, b, n = 10):
     x = np.random.normal(0, 1, n)

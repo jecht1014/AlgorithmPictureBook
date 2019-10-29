@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from mpl_toolkits.mplot3d import Axes3D
-from gaussian_process import *
+from gaussian_def.gaussian_process import *
 
 def rbf_plot():
     #x = np.linspace(-5, 5, 50)

@@ -1,4 +1,10 @@
+# chapter3
 import numpy as np
+
+import sys
+import os
+sys.path.append(os.getcwd())
+from gaussian_def.gaussian_distribution import *
 
 # 平均0の多変量正規乱数の作成
 def mvnrnd(sigma):
