@@ -16,7 +16,23 @@ def mvnrnd(sigma):
     return y
 
 # ガウスカーネル関数
-def rbf(x, theta1 = 1, theta2 = 1):
+def rbf(x1, x2, theta1 = 1, theta2 = 1):
+    return theta1 * np.exp(-np.power(x2 - x1, 2) / theta2)
+
+# 線形カーネル関数
+def linear_kernel(x1, x2):
+    return x1*x2
+
+# 指数カーネル関数
+def exponential_kernel(x1, x2, theta = 1):
+    return np.exp(-np.abs(x1 - x2) / theta)
+
+# 周期カーネル
+def periodic_kernel(x1, x2, theta1 = 1, theta2 = 1):
+    return np.exp(theta1 * np.cos(np.abs(x1-x2) / theta2))
+
+# カーネルで共分散行列の作製
+def make_k(x, kernel):
     x2 = np.tile(x.T, (x.shape[0], 1))
-    k = theta1 * np.exp(-np.power(x2 - x, 2) / theta2)
+    k = kernel(x, x2)
     return k
