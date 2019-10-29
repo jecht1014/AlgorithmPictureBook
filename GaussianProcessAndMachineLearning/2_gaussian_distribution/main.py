@@ -43,7 +43,8 @@ def multivariate_gaussian_probability_density_plot3d():
     plt.show()
 
 def rbf_plot():
-    x = np.arange(0, 5, 0.2) + 1
+    x = np.linspace(-1, 1, 50)
+    #x = np.arange(0, 5, 0.2) + 1
     x2 = np.reshape(x, (x.shape[0], 1))
     k = rbf(x2)
     r = np.reshape(mvnrnd(k), (x.shape[0]))
