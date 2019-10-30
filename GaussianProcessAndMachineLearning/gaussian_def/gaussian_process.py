@@ -1,5 +1,6 @@
 # chapter3
 import numpy as np
+from scipy.optimize import minimize
 
 import sys
 import os
@@ -23,13 +24,6 @@ def rbf(x1, x2, params, coordinate=None):
     else:
         return np.exp(tau) * np.exp(-np.power(x2 - x1, 2) / np.exp(sigma))
 
-def kernel_partial_differentiation(x1, x2, params, kernel, h=0.000001):
-    a, b, c = np.log(theta1), np.log(theta2), np.log(theta3)
-    #hena = (rbf(x1, x2, theta1=np.exp(a+h), theta2=np.exp(b), theta3=np.exp(c)) - rbf(x1, x2, theta1=np.exp(a+h), theta2=np.exp(b), theta3=np.exp(c))) / h
-    #henb = (rbf(x1, x2, theta1=np.exp(a), theta2=np.exp(b+h), theta3=np.exp(c)) - rbf(x1, x2, theta1=np.exp(a+h), theta2=np.exp(b), theta3=np.exp(c))) / h
-    #henc = (rbf(x1, x2, theta1=np.exp(a), theta2=np.exp(b), theta3=np.exp(c+h)) - rbf(x1, x2, theta1=np.exp(a+h), theta2=np.exp(b), theta3=np.exp(c))) / h
-    return (hena, henb, henc)
-
 # 線形カーネル関数
 def linear_kernel(x1, x2, params, coordinate=None):
     [tau] = params
@@ -39,15 +33,15 @@ def linear_kernel(x1, x2, params, coordinate=None):
         return x1*x2
 
 # 指数カーネル関数
-def exponential_kernel(x1, x2, params):
+def exponential_kernel(x1, x2, params, coordinate=None):
     [tau,sigma] = params
     if coordinate is None or coordinate[0] == coordinate[1]:
         return np.exp(-np.abs(x1 - x2) / np.exp(tau)) + np.exp(sigma)*np.eye(x2.shape[0])
-    else
+    else:
         return np.exp(-np.abs(x1 - x2) / np.exp(tau))
 
 # 周期カーネル
-def periodic_kernel(x1, x2, params):
+def periodic_kernel(x1, x2, params, coordinate=None):
     [tau,sigma,eta] = params
     if coordinate is None or coordinate[0] == coordinate[1]:
         return np.exp(np.exp(tau) * np.cos(np.abs(x1-x2) / np.exp(sigma))) + np.exp(eta)*np.eye(x2.shape[0])
@@ -55,7 +49,7 @@ def periodic_kernel(x1, x2, params):
         return np.exp(np.exp(tau) * np.cos(np.abs(x1-x2) / np.exp(sigma)))
 
 # Matern3
-def matern3(x1, x2, params):
+def matern3(x1, x2, params, coordinate=None):
     [tau,sigma] = params
     if coordinate is None or coordinate[0] == coordinate[1]:
         return (1 + np.sqrt(3) * np.abs(x1 - x2) / np.exp(tau)) * np.exp(-np.sqrt(3) * np.abs(x1 - x2) / np.exp(tau)) + np.exp(sigma)*np.eye(x2.shape[0])
@@ -63,7 +57,7 @@ def matern3(x1, x2, params):
         return (1 + np.sqrt(3) * np.abs(x1 - x2) / np.exp(tau)) * np.exp(-np.sqrt(3) * np.abs(x1 - x2) / np.exp(tau))
 
 # Matern5
-def matern5(x1, x2, params):
+def matern5(x1, x2, params, coordinate=None):
     [tau,sigma] = params
     if coordinate is None or coordinate[0] == coordinate[1]:
         return (1 + np.sqrt(5) * np.abs(x1 - x2) / np.exp(tau) + 5 * np.power(x1-x2, 2) / (3 * np.power(x1-x2, 2))) * np.exp(-np.sqrt(5) * np.abs(x1-x2) / np.exp(tau)) + np.exp(sigma)*np.eye(x2.shape[0])
@@ -75,6 +69,33 @@ def make_k(x, params, kernel):
     x2 = np.tile(x.T, (x.shape[0], 1))
     k = kernel(x, x2, params)
     return k
+
+# 偏微分
+def gradient(params, xtrain, ytrain, kernel, h = 0.00001):
+    K = make_k(xtrain, params, kernel)
+    Kinv = np.linalg.inv(K)
+    grad = np.zeros(len(params))
+    for i in range(len(params)):
+        params[i] += h
+        kernel_bibun = (make_k(xtrain, params, kernel) - K) / h
+        params[i] -= h
+        grad[i] = np.trace(Kinv.dot(kernel_bibun)) - (Kinv.dot(ytrain)).T.dot(kernel_bibun).dot(Kinv).dot(ytrain)
+    return grad
+
+# 最小化する関数
+def loglik(params, xtrain, ytrain, kernel):
+    K = make_k(xtrain, params, kernel)
+    Kinv = np.linalg.inv(K)
+    return (np.log(np.linalg.det(K)) + ytrain.T.dot(Kinv).dot(ytrain))[0][0]
+
+def printparam (params):
+    print (params)
+
+# parameter最適化
+def optimize(xtrain, ytrain, kernel, init):
+    res = minimize(loglik, init, args=(xtrain, ytrain, kernel), jac=gradient, method='BFGS', callback=printparam, options = {'gtol' : 1e-4, 'disp' : True})
+    print(res.message)
+    return res.x
 
 # ガウス過程回帰(ハイパーパラメータ最適化なし)
 def gaussian_process(xtrain, xtest, ytrain, ytest, params, kernel=rbf):
@@ -93,5 +114,7 @@ def gaussian_process(xtrain, xtest, ytrain, ytest, params, kernel=rbf):
     return mu, var
 
 # ガウス過程回帰(ハイパーパラメータ最適化あり)
-def gaussian_process_(xtrain, ytrain, sigma2=0.1, kernel=rbf):
-    K = make_k(xtrain, sigma2, kernel)
+def gaussian_process2(xtrain, xtest, ytrain, ytest, params, kernel=rbf):
+    #K = make_k(xtrain, sigma2, kernel)
+    params = optimize(xtrain, ytrain, kernel, params)
+    return gaussian_process(xtrain, xtest, ytrain, ytest, params, kernel)

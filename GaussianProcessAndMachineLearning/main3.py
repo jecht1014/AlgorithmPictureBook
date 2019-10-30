@@ -33,7 +33,7 @@ def kernel_plot(kernels, plot_k):
 def gaussian_process_plot():
     xtrain = np.linspace(-5, 5, 11)
     xtrain = xtrain.reshape(xtrain.shape[0], 1)
-    noise_var = 0.01
+    noise_var = 0.1
     ytrain = np.sin(xtrain) + np.random.normal(0, noise_var, (xtrain.shape[0], 1))
     ytrain = ytrain - np.mean(ytrain)
 
@@ -42,7 +42,7 @@ def gaussian_process_plot():
     ytest = np.sin(xtest)
 
     params = [np.log(1), np.log(1), np.log(noise_var)]
-    mu, var = gaussian_process(xtrain, xtest, ytrain, ytest, params, rbf)
+    mu, var = gaussian_process2(xtrain, xtest, ytrain, ytest, params, rbf)
 
     plt.plot(xtest.reshape(xtest.shape[0]), mu)
     plt.plot(xtest, ytest)
@@ -54,11 +54,12 @@ def gaussian_process_plot():
     plt.show()
 
 def gaussian_process_hyperparameter_estimate():
-    train = np.loadtxt('data/gpr.dat', dtype=float)
-    xtrain = train[:, 0].reshape(train[:, 0].shape[0], 1)
-    ytrain = train[:, 1].reshape(train[:, 1].shape[0], 1)
-    params = [np.log(1), np.log(1), np.log(1)]
-    make_k(xtrain, params, rbf)
+    #train = np.loadtxt('data/gpr.dat', dtype=float)
+    #xtrain = train[:, 0].reshape(train[:, 0].shape[0], 1)
+    #ytrain = train[:, 1].reshape(train[:, 1].shape[0], 1)
+    params = [np.log(2), np.log(2), np.log(2)]
+    
+    #gaussian_process2(xtrain, ytrain, params, rbf)
 
 #kernel_plot([periodic_kernel, exponential_kernel], False)
 gaussian_process_plot()
