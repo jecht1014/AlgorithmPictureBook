@@ -31,13 +31,21 @@ def exponential_kernel(x1, x2, theta = 1):
 def periodic_kernel(x1, x2, theta1 = 1, theta2 = 1):
     return np.exp(theta1 * np.cos(np.abs(x1-x2) / theta2))
 
+# Matern3
+def matern3(x1, x2, theta = 1):
+    return (1 + np.sqrt(3) * np.abs(x1 - x2) / theta) * np.exp(-np.sqrt(3) * np.abs(x1 - x2) / theta)
+
+# Matern5
+def matern5(x1, x2, theta = 1):
+    return (1 + np.sqrt(5) * np.abs(x1 - x2) / theta + 5 * np.power(x1-x2, 2) / (3 * np.power(x1-x2, 2))) * np.exp(-np.sqrt(5) * np.abs(x1-x2) / theta)
+
 # カーネルで共分散行列の作製
 def make_k(x, sigma2, kernel):
     x2 = np.tile(x.T, (x.shape[0], 1))
     k = kernel(x, x2) + sigma2 * np.eye(x2.shape[0])
     return k
 
-# ガウス過程回帰
+# ガウス過程回帰(ハイパーパラメータ最適化なし)
 def gaussian_process(xtrain, xtest, ytrain, ytest, sigma2, kernel = rbf):
     K = make_k(xtrain, sigma2, kernel)
     k = np.zeros((1, ytrain.shape[0]))
