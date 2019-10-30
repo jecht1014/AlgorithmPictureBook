@@ -33,8 +33,9 @@ def kernel_plot(kernels, plot_k):
 def gaussian_process_plot():
     xtrain = np.linspace(-5, 5, 11)
     xtrain = xtrain.reshape(xtrain.shape[0], 1)
-    noise_var = 0.1
+    noise_var = 0.01
     ytrain = np.sin(xtrain) + np.random.normal(0, 0.1, (xtrain.shape[0], 1))
+    ytrain = ytrain - np.mean(ytrain)
 
     xtest = np.linspace(-6, 6, 500)
     xtest = xtest.reshape(xtest.shape[0], 1)
@@ -44,7 +45,7 @@ def gaussian_process_plot():
     plt.plot(xtest.reshape(xtest.shape[0]), mu)
     plt.plot(xtest, ytest)
     plt.fill_between(xtest.reshape(xtest.shape[0]), mu-2*np.sqrt(var), mu+2*np.sqrt(var), color = '#ccccff')
-    plt.scatter(xtrain, ytrain, c='pink')
+    plt.scatter(xtrain, ytrain, c='green')
 
     plt.show()
 
