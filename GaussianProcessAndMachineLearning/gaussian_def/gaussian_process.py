@@ -115,6 +115,9 @@ def gaussian_process(xtrain, xtest, ytrain, ytest, params, kernel=rbf):
 
 # ガウス過程回帰(ハイパーパラメータ最適化あり)
 def gaussian_process2(xtrain, xtest, ytrain, ytest, params, kernel=rbf):
-    #K = make_k(xtrain, sigma2, kernel)
     params = optimize(xtrain, ytrain, kernel, params)
     return gaussian_process(xtrain, xtest, ytrain, ytest, params, kernel)
+
+# コーシー分布の確率密度関数
+def cauchy_distribution(x, avg=0, gamma=1):
+    return 1 / (np.pi * (gamma + np.power(x-avg, 2)/gamma))

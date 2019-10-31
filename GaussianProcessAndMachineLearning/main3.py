@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from mpl_toolkits.mplot3d import Axes3D
 from gaussian_def.gaussian_process import *
+from gaussian_def.gaussian_distribution import gaussian_probability_density
 
 # カーネルを通してできた共分散行列を用いて多変量正規乱数を出力した結果
 # kernelsにはリストに入れたカーネルかカーネルを入れる、plot_kはboolでTrueならば共分散行列のplot
@@ -58,6 +59,17 @@ def gaussian_process_plot():
     #plt.savefig('image/chapter3/hyper_parameter_estimate.png')
     plt.show()
 
+def cauty_distribution_plot():
+    x = np.linspace(-5, 5, 500)
+    y1 = cauchy_distribution(x)
+    y2 = gaussian_probability_density(x)
+
+    plt.plot(x, y2)
+    plt.plot(x, y1)
+    plt.legend(['gaussian', 'cauty'])
+    plt.savefig('image/chapter3/cauty_distribution.png')
+    plt.show()
 #kernel_plot([periodic_kernel, exponential_kernel], [[np.log(1), np.log(1), np.log(1)], [np.log(1), np.log(1)]], False)
 #kernel_plot(linear_kernel, [np.log(1)], True)
-gaussian_process_plot()
+#gaussian_process_plot()
+cauty_distribution_plot()
