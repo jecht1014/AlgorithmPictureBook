@@ -62,12 +62,12 @@ def matern5(x1, x2, params, coordinate=None):
     if coordinate is None or coordinate[0] == coordinate[1]:
         return (1 + np.sqrt(5) * np.abs(x1 - x2) / np.exp(tau) + 5 * np.power(x1-x2, 2) / (3 * np.power(x1-x2, 2))) * np.exp(-np.sqrt(5) * np.abs(x1-x2) / np.exp(tau)) + np.exp(sigma)*np.eye(x2.shape[0])
     else:
-        return (1 + np.sqrt(5) * np.abs(x1 - x2) / np.exp(tau) + 5 * np.power(x1-x2, 2) / (3 * np.power(x1-x2, 2))) * np.exp(-np.sqrt(5) * np.abs(x1-x2) / np.exp(tau))
+        return (1 + np.sqrt(5) * np.abs(x1 - x2) / np.exp(tau) + 5 * np.power(x1-x2, 2) / (3 * np.power(np.exp(tau), 2))) * np.exp(-np.sqrt(5) * np.abs(x1-x2) / np.exp(tau))
 
 # カーネルで共分散行列の作製
-def make_k(x, params, kernel):
+def make_k(x, params, kernel, sigma=None):
     x2 = np.tile(x.T, (x.shape[0], 1))
-    k = kernel(x, x2, params)
+    k = kernel(x, x2, params, sigma)
     return k
 
 # 偏微分
