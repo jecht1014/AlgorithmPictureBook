@@ -121,3 +121,7 @@ def gaussian_process2(xtrain, xtest, ytrain, ytest, params, kernel=rbf):
 # コーシー分布の確率密度関数
 def cauchy_distribution(x, avg=0, gamma=1):
     return 1 / (np.pi * (gamma + np.power(x-avg, 2)/gamma))
+
+# ロジスティック関数
+def logistic_function(x):
+    return 1 / (1 + np.exp(x))
