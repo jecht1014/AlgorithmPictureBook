@@ -10,6 +10,7 @@ def gaussian_probability_density_plot(mu = 0, sigma2 = 1):
     y = gaussian_probability_density(x)
 
     plt.plot(x, y)
+    #plt.savefig('image/chapter2/gaussian_probability_density.png')
     plt.show()
 
 def box_muller_plot(n, mu = 0, sigma2 = 1):
@@ -17,6 +18,7 @@ def box_muller_plot(n, mu = 0, sigma2 = 1):
     x = np.array([box_muller(mu = mu, sigma2 = sigma2) for i in range(n)])
 
     plt.hist(x)
+    #plt.savefig('image/chapter2/box_muller.png')
     plt.show()
 
 def multivariate_gaussian_probability_density_plot3d():
@@ -40,6 +42,7 @@ def multivariate_gaussian_probability_density_plot3d():
     ax.set_ylabel('x2')
     ax.set_zlabel('n')
     ax.plot_wireframe(x1_1, x1_2, n)
+    #plt.savefig('image/chapter2/multivariate_gaussian_probability_density3d.png')
     plt.show()
 
 gaussian_probability_density_plot()

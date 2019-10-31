@@ -21,6 +21,7 @@ def simple_regression_plot(a, b, n = 10):
     plt.plot(x2, y2)
     plt.plot(x2, y3)
     plt.legend(['real', 'prediction'])
+    #plt.savefig('image/chapter1/simpre_regression.png')
     plt.show()
 
 def multiple_regression3d_plot(w, n = 10):
@@ -46,6 +47,7 @@ def multiple_regression3d_plot(w, n = 10):
     ax.plot_wireframe(x2_1, x2_2, y2)
     ax.plot_wireframe(x2_1, x2_2, y3)
     ax.plot(x[:, 0], x[:, 1], y[0, :], marker = 'o', linestyle = 'None')
+    #plt.savefig('image/chapter1/multiple_regression3d.png')
     plt.show()
 
 def x_to_function(x):
@@ -74,6 +76,7 @@ def linear_regression2d_plot(w, n = 10):
     plt.scatter(x1, y)
     plt.plot(x2, y2)
     plt.plot(x2, y3)
+    #plt.savefig('image/chapter1/linear_regression2d.png')
     plt.show()
 
 '''
