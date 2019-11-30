@@ -30,3 +30,14 @@ for s in re.findall(pattern, country_data['イギリス']['text']):
 pattern = '\[\[File:(.+?)\|thumb'
 for s in re.findall(pattern, country_data['イギリス']['text']):
     print(s)
+
+# 25
+pattern = '\{\{基礎情報 国\n([\s\S]+?)}}\n'
+basic_data = re.findall(pattern, country_data['イギリス']['text'])
+basic_data_dict = {}
+for s in basic_data[0][1:].split('\n|'):
+    a = s.split(' = ')
+    if a[1][-1] == '\n':
+        a[1] = a[1][:-1]
+    basic_data_dict[a[0]] = a[1]
+    print('({0}, {1})'.format(a[0], a[1]))
