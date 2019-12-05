@@ -45,26 +45,30 @@ class GA:
         
     def one_point_crossover(self):
         parent = random.sample(self.gene, 2)
-        print(parent)
         if self.lethal_gene_avoidance:
             base_sequence_table = copy.deepcopy(parent[0])
             parent[0], parent[1] = self.base_sequence_table_encode(parent[0], parent[1])
-        print(parent)
         cut_point = random.randint(1, self.gene_len-1)
-        print(cut_point)
         children = [parent[0][:cut_point]+parent[1][cut_point:], parent[1][:cut_point]+parent[0][cut_point:]]
         if self.lethal_gene_avoidance:
             children[0], children[1] = self.base_sequence_table_decode(base_sequence_table, children[0], children[1])
-        print(children)
+
         self.children_gene += children
 
     def mutation(self):
         for i in range(len(self.children_gene)):
-            for j in range(self.gene_len):
+            if self.lethal_gene_avoidance:
                 if (random.random() <= self.mutation_rate):
-                    l = copy.deepcopy(self.genotype)
-                    l.remove(self.children_gene[i][j])
-                    self.children_gene[i][j] = random.choice(l)
+                    a = random.sample(list(range(self.gene_len)), 2)
+                    tmp = self.children_gene[i][a[0]]
+                    self.children_gene[i][a[0]] = self.children_gene[i][a[1]]
+                    self.children_gene[i][a[1]] = tmp
+            else:
+                for j in range(self.gene_len):
+                    if (random.random() <= self.mutation_rate):
+                        l = copy.deepcopy(self.genotype)
+                        l.remove(self.children_gene[i][j])
+                        self.children_gene[i][j] = random.choice(l)
 
     def roulette_method(self):
         self.gene = []
