@@ -1,3 +1,5 @@
+# GA
+遺伝的アルゴリズムの実装(python)  
 # mahjong
 麻雀のあたり牌予測を行う(python)  
 # monte_carlo_method
