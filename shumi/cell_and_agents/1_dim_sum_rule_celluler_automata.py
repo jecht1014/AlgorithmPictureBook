@@ -2,13 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
+class NeighborhoodAndRuleNumMismatchError(Exception):
+    pass
+
 save_path = 'image'
 
 # 規則番号から自動的にルールの生成
-neighborhood = 5
-rule_num = 20
+neighborhood = 5 #n近傍
+rule_num = 50 #規則番号
 rule_dict = {}
 rule_num_c = rule_num
+if (rule_num >= 2**(neighborhood+1)):
+    raise NeighborhoodAndRuleNumMismatchError('rule_numとneighborhoodの関係が不一致です')
 for i in range(neighborhood, -1, -1):
     if (rule_num_c >= 2**i):
         rule_dict[i] = 1
@@ -29,4 +34,4 @@ for i in range(int(cell_len / 2)-1):
 cells = np.array(cells[::-1])
 X,Y = np.meshgrid(np.arange(cells.shape[1]),np.arange(cells.shape[0]))
 plt.pcolormesh(X, Y, cells, cmap='Greys')
-plt.savefig(save_path+'/1_dim_cell_sum_transition_rules{0:03}_{1:03}.png'.format(rule_num, cell_len))
+plt.savefig(save_path+'/1_dim_cell_neighborhood{0}_sum_transition_rules{1:03}_{2:03}.png'.format(neighborhood,rule_num, cell_len))
