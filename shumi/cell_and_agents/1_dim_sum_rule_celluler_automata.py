@@ -4,16 +4,21 @@ import random
 
 class NeighborhoodAndRuleNumMismatchError(Exception):
     pass
-
-save_path = 'image'
+class NeighborhoodError(Exception):
+    pass
 
 # 規則番号から自動的にルールの生成
-neighborhood = 5 #n近傍
-rule_num = 50 #規則番号
-rule_dict = {}
-rule_num_c = rule_num
+neighborhood = 7 #n近傍
+rule_num = 100 #規則番号
+save_path = 'image'
+
+if (neighborhood % 2 == 0):
+    raise NeighborhoodError('neighborhoodは奇数です')
 if (rule_num >= 2**(neighborhood+1)):
     raise NeighborhoodAndRuleNumMismatchError('rule_numとneighborhoodの関係が不一致です')
+
+rule_dict = {}
+rule_num_c = rule_num
 for i in range(neighborhood, -1, -1):
     if (rule_num_c >= 2**i):
         rule_dict[i] = 1
