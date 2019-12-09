@@ -2,6 +2,7 @@ import random
 import copy
 
 class GA:
+    # 最初の遺伝子の作成(ランダム)
     def generate_gene(self):
         for i in range(self.gene_num):
             if (self.lethal_gene_avoidance):
@@ -9,6 +10,8 @@ class GA:
             else:
                 self.gene.append(random.choices(self.genotype, k=self.gene_len))
 
+    # genotype:染色体の種類 genelen:遺伝子の長さ gene_num:遺伝子を次世代に受け継ぐ数
+    # mutation_rate:突然変異率 lethal_gene_avoidance:致死遺伝子対策が必要か否か、デフォルトはFalse
     def __init__(self, genotype: list, gene_len: int, gene_num: int, mutation_rate: float, lethal_gene_avoidance=False):
         self.genotype = genotype
         self.gene_len = gene_len
@@ -20,6 +23,7 @@ class GA:
         self.fitness = None
         self.generate_gene()
 
+    # 致死遺伝子対策が必要な場合の遺伝子のエンコード
     def base_sequence_table_encode(self, gene1, gene2):
         c1 = [1] * len(gene1)
         c2 = []
@@ -30,6 +34,7 @@ class GA:
 
         return c1, c2
 
+    # 交叉後に遺伝子をデコードするよう
     def base_sequence_table_decode(self, base_sequence_table, c1, c2):
         p1 = []
         p2 = []
@@ -43,6 +48,7 @@ class GA:
             del base_sequence_table_c[s-1]
         return p1, p2
         
+    # 一点交叉
     def one_point_crossover(self):
         parent = random.sample(self.gene, 2)
         if self.lethal_gene_avoidance:
@@ -55,6 +61,7 @@ class GA:
 
         self.children_gene += children
 
+    # 突然変異
     def mutation(self):
         for i in range(len(self.children_gene)):
             if self.lethal_gene_avoidance:
@@ -70,6 +77,8 @@ class GA:
                         l.remove(self.children_gene[i][j])
                         self.children_gene[i][j] = random.choice(l)
 
+    # ルーレット選択アルゴリズム(評価が高いほど選択されやすい)
+    # num:ルーレット選択で選ぶ数 high_or_low:高いほど評価が高いか、低いほど評価がいいか
     def roulette_method(self, num, high_or_low='high'):
         # 低いほど良い場合の処理
         if high_or_low == 'low':
