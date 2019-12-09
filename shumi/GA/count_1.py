@@ -9,4 +9,6 @@ while (True):
     print(max(ga.fitness))
     if (max(ga.fitness) == 10):
         break
-    ga.roulette_method()
+    
+    ga.gene = []
+    ga.roulette_method(20)

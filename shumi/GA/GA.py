@@ -70,9 +70,11 @@ class GA:
                         l.remove(self.children_gene[i][j])
                         self.children_gene[i][j] = random.choice(l)
 
-    def roulette_method(self):
-        self.gene = []
-        for i in range(self.gene_num):
+    def roulette_method(self, num, high_or_low='high'):
+        # 低いほど良い場合の処理
+        if high_or_low == 'low':
+            self.fitness = [abs(f-(max(self.fitness)+1)) for f in self.fitness]
+        for i in range(num):
             f = copy.deepcopy(self.fitness)
             f_probability = [float(i) / sum(f) for i in f]
             probability_sum = 0
