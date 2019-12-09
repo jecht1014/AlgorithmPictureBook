@@ -1,5 +1,6 @@
 import re
 import collections
+import matplotlib.pyplot as plt
 
 # 30
 with open('neko.txt.mecab', encoding='utf-8') as f:
@@ -73,7 +74,6 @@ for line in all_line:
             count = 0
     if (count >= 2):
         noun_series_list.append(noun)
-
 print(len(noun_series_list))
 print(noun_series_list[:5])
 
@@ -81,3 +81,12 @@ print(noun_series_list[:5])
 all_word = [word['surface'] for line in all_line for word in line]
 word_count = collections.Counter(all_word)
 print(word_count.most_common()[:5])
+
+# 37
+w = []
+c = []
+for i in range(10):
+    w.append(word_count.most_common()[i][0])
+    c.append(word_count.most_common()[i][1])
+plt.bar(w, c)
+plt.show()
