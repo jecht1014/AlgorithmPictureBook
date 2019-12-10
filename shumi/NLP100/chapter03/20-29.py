@@ -2,6 +2,7 @@ import json
 import gzip
 import re
 import requests
+import json
 
 # 20
 filename = 'jawiki-country.json.gz'
@@ -87,3 +88,19 @@ for s in basic_data[0][1:].split('\n|'):
         a[1] = a[1][:-1]
     basic_data_dict[a[0]] = a[1]
     print('({0}, {1})'.format(a[0], a[1]))
+
+# 29
+with requests.Session() as S:
+    URL = 'https://en.wikipedia.org/w/api.php'
+    PARAMS = {
+        'action': 'query',
+        'format': 'json',
+        'prop': 'imageinfo',
+        'iiprop': 'url',
+        'titles': 'File:'+basic_data_dict['国旗画像']
+    }
+    R = S.get(url=URL, params=PARAMS)
+    DATA = R.json()
+
+basic_data_dict['国旗画像'] = list(DATA['query']['pages'].values())[0]['imageinfo'][0]['url']
+print(basic_data_dict['国旗画像'])
