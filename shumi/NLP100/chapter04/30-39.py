@@ -1,5 +1,11 @@
 import re
 import collections
+
+# ubuntuの場合
+from matplotlib import rcParams
+rcParams['font.family'] = 'sans-serif'
+rcParams['font.sans-serif'] = ['Hiragino Maru Gothic Pro', 'Yu Gothic', 'Meirio', 'Takao', 'IPAexGothic', 'IPAPGothic', 'VL PGothic', 'Noto Sans CJK JP']
+
 import matplotlib.pyplot as plt
 
 # 30
@@ -80,7 +86,7 @@ print(noun_series_list[:5])
 # 36
 all_word = [word['surface'] for line in all_line for word in line]
 word_count = collections.Counter(all_word)
-print(word_count.most_common()[:5])
+print(word_count.most_common()[:10])
 
 # 37
 w = []
@@ -89,4 +95,22 @@ for i in range(10):
     w.append(word_count.most_common()[i][0])
     c.append(word_count.most_common()[i][1])
 plt.bar(w, c)
-plt.show()
+#plt.show()
+plt.savefig('top10.png')
+plt.close()
+
+# 38
+plt.hist(list(word_count.values()), bins=20, range=(1, 20))
+#plt.show()
+plt.savefig('hist.png')
+plt.close()
+
+# 39
+c = [i[1] for i in word_count.most_common()]
+
+ax = plt.gca()
+ax.set_yscale('log')
+ax.set_xscale('log')
+plt.scatter(c, list(range(1, len(word_count)+1)), s=1)
+#plt.show()
+plt.savefig('zipf_law.png')
