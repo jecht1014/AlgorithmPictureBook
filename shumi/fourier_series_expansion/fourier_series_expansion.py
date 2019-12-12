@@ -27,9 +27,11 @@ def fourier_series_expansion(function, section, expansion_num, x):
 save_path = 'image'
 def func(x):
     return x*x
-x = np.linspace(-2*np.pi, 2*np.pi, 1000)
+x = np.linspace(-np.pi, np.pi, 1000)
 true_y = func(x)
 y = fourier_series_expansion(func, [-np.pi, np.pi], 8, x)
-plt.plot(x, y)
-#plt.plot(x, true_y)
-plt.show()
+
+plt.plot(x, y, label='approximation')
+plt.plot(x, true_y, label='genuine')
+plt.legend()
+plt.savefig(save_path+'/fourier_series_expansion_xx.png')
