@@ -1,3 +1,7 @@
+# cell_and_agents
+セルとマルチエージェントの実装(python)  
+# fourier_series_expansion
+フーリエ級数展開により関数近似を行うプログラムの実装(python)  
 # GA
 遺伝的アルゴリズムの実装(python)  
 # mahjong
