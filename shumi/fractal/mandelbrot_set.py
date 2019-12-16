@@ -5,7 +5,7 @@ save_path = 'image'
 def mandelbrot_func(z, c):
     return z**2 + c
 
-X,Y = np.meshgrid(np.arange(-2, 2, 0.01),np.arange(-2, 2, 0.01))
+X,Y = np.meshgrid(np.arange(-2, 1.5, 0.01),np.arange(-2, 2, 0.01))
 value = np.zeros_like(X.flatten())
 for i,  (real, imaginary) in enumerate(zip(X.flatten(), Y.flatten())):
     z = 0 + 0j
@@ -20,5 +20,6 @@ value = value.reshape(X.shape)
 
 plt.contourf(X, Y, value, cmap='Greys')
 plt.colorbar()
+plt.title('z**2')
 #plt.show()
 plt.savefig(save_path+'/mandelbrot_square.png')
