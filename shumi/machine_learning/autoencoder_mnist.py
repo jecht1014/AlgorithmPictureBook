@@ -9,6 +9,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
+import cv2
 
 class mydataset(torch.utils.data.Dataset):
     def __init__(self, data_num, input_data, label, transform = None):
@@ -58,8 +59,8 @@ train_input = torch.flatten(train_input, start_dim=1, end_dim=2)
 target_label = 1
 batch_size = 64
 input_size = 28*28
-hidden_size = 32
-epochs = 200
+hidden_size = 128
+epochs = 400
 save_path = 'result/compression_autoencoder_h{0}'.format(hidden_size)
 os.makedirs(save_path, exist_ok=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -84,12 +85,12 @@ batch_num = math.ceil(train_label_data.shape[0] / batch_size)
 os.makedirs(save_path+'/image', exist_ok=True)
 def makeImage(model, epoch):
     with torch.no_grad():
-        outputs = autoencoder(mnist_sample).detach().cpu()
-    outputs = outputs.reshape((outputs.shape[0], 1, 28, 28))
+        outputs = autoencoder(mnist_sample).detach().cpu() * 255
+    outputs = outputs.reshape((outputs.shape[0], 1, 28, 28)).int()
     plt.figure(figsize=(8, 8))
     plt.axis('off')
     plt.title('{0:04} epochs Autoencoder Result'.format(epoch))
-    plt.imshow(np.transpose(vutils.make_grid(outputs, normalize=True, range=(0, 1)), (1, 2, 0)))
+    plt.imshow(np.transpose(vutils.make_grid(outputs), (1, 2, 0)))
     plt.savefig(save_path + '/image/{0:04}_epochs.png'.format(epoch))
     plt.close()
 
@@ -118,5 +119,14 @@ plt.ylabel("Loss")
 plt.savefig(save_path + '/loss.png')
 plt.close()
 
+# サンプルの出力結果の保存
+fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
+video = cv2.VideoWriter(save_path + '/video.mov', fourcc, 40.0, (800, 800))
+for i in range(1, epochs+1):
+    img = cv2.imread(save_path + '/image/{0:04}_epochs.png'.format(i))
+    video.write(img)
+video.release()
+
+# 学習による
 with open(save_path + '/history.pickle', mode='wb') as f:
     pickle.dump(history, f)
