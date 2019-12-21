@@ -8,6 +8,7 @@ import math
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
 
 class mydataset(torch.utils.data.Dataset):
     def __init__(self, data_num, input_data, label, transform = None):
@@ -57,9 +58,9 @@ train_input = torch.flatten(train_input, start_dim=1, end_dim=2)
 target_label = 1
 batch_size = 64
 input_size = 28*28
-hidden_size = 128
-epochs = 1000
-save_path = 'result/compression_autoencoder_h128'
+hidden_size = 32
+epochs = 200
+save_path = 'result/compression_autoencoder_h{0}'.format(hidden_size)
 os.makedirs(save_path, exist_ok=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 mnist_sample = train_input[:64].float().to(device)
@@ -92,6 +93,7 @@ def makeImage(model, epoch):
     plt.savefig(save_path + '/image/{0:04}_epochs.png'.format(epoch))
     plt.close()
 
+history = {'loss': []}
 for epoch in range(1, epochs+1):
     sum_loss = 0
     for i, data in enumerate(train_dataloader, 0):
@@ -103,6 +105,18 @@ for epoch in range(1, epochs+1):
         loss.backward()
         optimizer.step()
         sum_loss += loss.item()
-    makeImage(autoencoder, epoch)
 
+    history['loss'].append(sum_loss/batch_num)
+    makeImage(autoencoder, epoch)
     print('epoch:{0:04}\tloss:{1:.4}'.format(epoch, sum_loss/batch_num))
+
+plt.figure()
+plt.title("Loss During Training")
+plt.plot(history['loss'],label="loss")
+plt.xlabel("epochs")
+plt.ylabel("Loss")
+plt.savefig(save_path + '/loss.png')
+plt.close()
+
+with open(save_path + '/history.pickle', mode='wb') as f:
+    pickle.dump(history, f)
