@@ -2,8 +2,12 @@ from torchvision import datasets, transforms
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torchvision.utils as vutils
 
 import math
+import os
+import matplotlib.pyplot as plt
+import numpy as np
 
 class mydataset(torch.utils.data.Dataset):
     def __init__(self, data_num, input_data, label, transform = None):
@@ -50,13 +54,15 @@ print(len(test_data))
 train_input, train_label = train_data.data/255, train_data.targets
 train_input = torch.flatten(train_input, start_dim=1, end_dim=2)
 
-mnist_sample = train_input[:64].to(device)
 target_label = 1
 batch_size = 64
 input_size = 28*28
 hidden_size = 128
 epochs = 1000
+save_path = 'result/compression_autoencoder_h128'
+os.makedirs(save_path, exist_ok=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+mnist_sample = train_input[:64].float().to(device)
 
 # 0~9の中でtargetのみのデータセットを作成する
 train_target_arg = torch.where(train_label == target_label)
@@ -74,6 +80,18 @@ optimizer = optim.Adam(autoencoder.parameters())
 
 batch_num = math.ceil(train_label_data.shape[0] / batch_size)
 
+os.makedirs(save_path+'/image', exist_ok=True)
+def makeImage(model, epoch):
+    with torch.no_grad():
+        outputs = autoencoder(mnist_sample).detach().cpu()
+    outputs = outputs.reshape((outputs.shape[0], 1, 28, 28))
+    plt.figure(figsize=(8, 8))
+    plt.axis('off')
+    plt.title('{0:04} epochs Autoencoder Result'.format(epoch))
+    plt.imshow(np.transpose(vutils.make_grid(outputs, normalize=True, range=(0, 1)), (1, 2, 0)))
+    plt.savefig(save_path + '/image/{0:04}_epochs.png'.format(epoch))
+    plt.close()
+
 for epoch in range(1, epochs+1):
     sum_loss = 0
     for i, data in enumerate(train_dataloader, 0):
@@ -82,8 +100,9 @@ for epoch in range(1, epochs+1):
         inputs = inputs.to(device)
         outputs = autoencoder(inputs)
         loss = criterion(outputs, inputs)
-        sum_loss += loss.item()
-        optimizer.step()
         loss.backward()
+        optimizer.step()
+        sum_loss += loss.item()
+    makeImage(autoencoder, epoch)
 
-    print('epoch:{0:04}\tloss:{1:}'.format(epoch, sum_loss/batch_num))
+    print('epoch:{0:04}\tloss:{1:.4}'.format(epoch, sum_loss/batch_num))
