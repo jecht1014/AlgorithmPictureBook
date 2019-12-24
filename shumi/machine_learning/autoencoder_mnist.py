@@ -108,12 +108,14 @@ def makeImage(model, epoch):
 os.makedirs(save_path+'/image/hist', exist_ok=True)
 def makeHist(model, epoch):
     fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(25, 8), sharex=True)
+    mean_error = []
     with torch.no_grad():
         for target_num in range(10):
             test_dataset[target_num] = test_dataset[target_num].to(device)
             outputs = autoencoder(test_dataset[target_num])
             # 1文字あたりの差の絶対値の総和
             outputs_sum = torch.sum(torch.abs(test_dataset[target_num]-outputs), 0)
+            mean_error.append(torch.mean(outputs_sum).item())
             # histgramの最大値をオーバーしたときに最大値まで下げる処理
             outputs_sum = torch.where(outputs_sum > 100, torch.tensor(100).float().to(device), outputs_sum)
             if (target_num < 5):
@@ -124,8 +126,9 @@ def makeHist(model, epoch):
                 axes[1, target_num-5].set_title(str(target_num))
         plt.savefig(save_path+'/image/hist/{0:04}_epochs.png'.format(epoch))
         plt.close()
+    return mean_error
 
-history = {'loss': []}
+history = {'loss': [], 'mean_error': []}
 for epoch in range(1, epochs+1):
     sum_loss = 0
     for i, data in enumerate(train_dataloader, 0):
@@ -140,7 +143,8 @@ for epoch in range(1, epochs+1):
 
     history['loss'].append(sum_loss/batch_num)
     makeImage(autoencoder, epoch)
-    makeHist(autoencoder, epoch)
+    history['mean_error'].append(makeHist(autoencoder, epoch))
+    print(history['mean_error'][epoch-1])
     print('epoch:{0:04}\tloss:{1:.4}'.format(epoch, sum_loss/batch_num))
 
 plt.figure()
