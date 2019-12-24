@@ -61,7 +61,7 @@ target_label = 1
 batch_size = 64
 input_size = 28*28
 hidden_size = 16
-epochs = 200
+epochs = 50
 save_path = 'result/compression_autoencoder_h{0}'.format(hidden_size)
 os.makedirs(save_path, exist_ok=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -72,18 +72,27 @@ train_target_arg = torch.where(train_label == target_label)
 print(train_input.shape)
 print(train_target_arg[0].shape)
 print(train_input[train_target_arg[0]].shape)
-train_input_data = train_input[train_target_arg[0]].float()
+train_input_data = train_input[train_target_arg[0]]
 train_label_data = train_label[train_target_arg[0]]
 train_dataset = mydataset(len(train_label_data), train_input_data, train_label_data)
 train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle = True)
 #mnist_sample = copy.deepcopy(train_input_data[:64]).to(device)
 batch_num = math.ceil(train_label_data.shape[0] / batch_size)
 
+# testの数字別のデータセットを作成する
+test_dataset = []
+test_input, test_label = test_data.data.float()/255, test_data.targets
+test_flatten_input = torch.flatten(test_input, start_dim=1, end_dim=2)
+for target_num in range(0, 10):
+    test_target_arg = torch.where(test_label == target_num)
+    test_dataset.append(test_flatten_input[test_target_arg[0]])
+
 autoencoder = Autoencoder(input_size, hidden_size).to(device)
 criterion = nn.MSELoss()
 optimizer = optim.Adam(autoencoder.parameters())
 
-os.makedirs(save_path+'/image', exist_ok=True)
+# 最初に準備したサンプルの画像の表示
+os.makedirs(save_path+'/image/sample_image', exist_ok=True)
 def makeImage(model, epoch):
     with torch.no_grad():
         outputs = autoencoder(mnist_sample).detach().cpu() * 255
@@ -92,8 +101,29 @@ def makeImage(model, epoch):
     plt.axis('off')
     plt.title('{0:04} epochs Autoencoder Result'.format(epoch))
     plt.imshow(np.transpose(vutils.make_grid(outputs), (1, 2, 0)))
-    plt.savefig(save_path + '/image/{0:04}_epochs.png'.format(epoch))
+    plt.savefig(save_path + '/image/sample_image/{0:04}_epochs.png'.format(epoch))
     plt.close()
+
+# testデータと出力の差の総和のhistgramの表示
+os.makedirs(save_path+'/image/hist', exist_ok=True)
+def makeHist(model, epoch):
+    fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(25, 8), sharex=True)
+    with torch.no_grad():
+        for target_num in range(10):
+            test_dataset[target_num] = test_dataset[target_num].to(device)
+            outputs = autoencoder(test_dataset[target_num])
+            # 1文字あたりの差の絶対値の総和
+            outputs_sum = torch.sum(torch.abs(test_dataset[target_num]-outputs), 0)
+            # histgramの最大値をオーバーしたときに最大値まで下げる処理
+            outputs_sum = torch.where(outputs_sum > 100, torch.tensor(100).float().to(device), outputs_sum)
+            if (target_num < 5):
+                axes[0, target_num].hist(torch.flatten(outputs_sum).cpu().numpy(), bins=20, range=(0,100))
+                axes[0, target_num].set_title(str(target_num))
+            else:
+                axes[1, target_num-5].hist(torch.flatten(outputs_sum).cpu().numpy(), bins=20, range=(0,100))
+                axes[1, target_num-5].set_title(str(target_num))
+        plt.savefig(save_path+'/image/hist/{0:04}_epochs.png'.format(epoch))
+        plt.close()
 
 history = {'loss': []}
 for epoch in range(1, epochs+1):
@@ -110,6 +140,7 @@ for epoch in range(1, epochs+1):
 
     history['loss'].append(sum_loss/batch_num)
     makeImage(autoencoder, epoch)
+    makeHist(autoencoder, epoch)
     print('epoch:{0:04}\tloss:{1:.4}'.format(epoch, sum_loss/batch_num))
 
 plt.figure()
@@ -120,13 +151,19 @@ plt.ylabel("Loss")
 plt.savefig(save_path + '/loss.png')
 plt.close()
 
-# サンプルの出力結果の保存
-fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
-video = cv2.VideoWriter(save_path + '/video.mov', fourcc, 40.0, (800, 800))
-for i in range(1, epochs+1):
-    img = cv2.imread(save_path + '/image/{0:04}_epochs.png'.format(i))
-    video.write(img)
-video.release()
+# 画像を動画に変更し保存
+def makeVideo(image_path, file_name):
+    fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
+    img = cv2.imread(image_path+'/0001_epochs.png')
+    height, width = img.shape[:2]
+    video = cv2.VideoWriter(save_path + '/'+file_name+'.mov', fourcc, 40.0, (width, height))
+    for i in range(1, epochs+1):
+        img = cv2.imread(image_path+'/{0:04}_epochs.png'.format(i))
+        video.write(img)
+    video.release()
+
+makeVideo(save_path+'/image/hist', 'hist_video')
+makeVideo(save_path+'/image/sample_image', 'sample_image_video')
 
 # 学習による
 with open(save_path + '/history.pickle', mode='wb') as f:
