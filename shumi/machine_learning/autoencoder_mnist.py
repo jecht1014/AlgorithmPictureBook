@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 import cv2
+import copy
 
 class mydataset(torch.utils.data.Dataset):
     def __init__(self, data_num, input_data, label, transform = None):
@@ -53,18 +54,18 @@ class Autoencoder(nn.Module):
 train_data = datasets.MNIST('./mnist/train', train=True, download=True, transform=transforms.ToTensor())
 test_data = datasets.MNIST('./mnist/test', train=False, download=True, transform=transforms.ToTensor())
 print(len(test_data))
-train_input, train_label = train_data.data/255, train_data.targets
+train_input, train_label = train_data.data.float() /255, train_data.targets
 train_input = torch.flatten(train_input, start_dim=1, end_dim=2)
 
 target_label = 1
 batch_size = 64
 input_size = 28*28
-hidden_size = 128
-epochs = 400
+hidden_size = 16
+epochs = 200
 save_path = 'result/compression_autoencoder_h{0}'.format(hidden_size)
 os.makedirs(save_path, exist_ok=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-mnist_sample = train_input[:64].float().to(device)
+mnist_sample = train_input[:64].to(device)
 
 # 0~9の中でtargetのみのデータセットを作成する
 train_target_arg = torch.where(train_label == target_label)
@@ -75,12 +76,12 @@ train_input_data = train_input[train_target_arg[0]].float()
 train_label_data = train_label[train_target_arg[0]]
 train_dataset = mydataset(len(train_label_data), train_input_data, train_label_data)
 train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle = True)
+#mnist_sample = copy.deepcopy(train_input_data[:64]).to(device)
+batch_num = math.ceil(train_label_data.shape[0] / batch_size)
 
 autoencoder = Autoencoder(input_size, hidden_size).to(device)
 criterion = nn.MSELoss()
 optimizer = optim.Adam(autoencoder.parameters())
-
-batch_num = math.ceil(train_label_data.shape[0] / batch_size)
 
 os.makedirs(save_path+'/image', exist_ok=True)
 def makeImage(model, epoch):
@@ -130,3 +131,4 @@ video.release()
 # 学習による
 with open(save_path + '/history.pickle', mode='wb') as f:
     pickle.dump(history, f)
+print(train_label[:64])
