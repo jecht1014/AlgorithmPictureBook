@@ -55,8 +55,8 @@ for i in range(10):
 batch_size = 64
 input_size = 64*64
 hidden_size = 1024
-epochs = 3
-save_path = 'result/moving_mnist_LSTM_autoencoder_h{0}'.format(hidden_size)
+epochs = 200
+save_path = 'result/moving_mnist_LSTM_autoencoder_h{0}_2'.format(hidden_size)
 os.makedirs(save_path + '/model', exist_ok=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 mnist_sample = train_data[:, :2, :].to(device)
@@ -76,6 +76,20 @@ def train2batch(data, batch_size):
     return input_batch
 
 os.makedirs(save_path+'/image', exist_ok=True)
+# 本物の画像の作成
+real_image = copy.deepcopy(mnist_sample)
+real_image = real_image * torch.tensor(255, device=device)
+real_image = real_image.int()
+real_image_c = torch.tensor([], device=device).int()
+for i in range(real_image.size(1)):
+    real_image_c = torch.cat([real_image_c, real_image[:, i, :]])
+real_image_c = real_image_c.reshape(real_image_c.size(0), 1, 64, 64)
+real_image = real_image_c
+plt.imshow(np.transpose(vutils.make_grid(real_image, nrow=10, pad_value=200).cpu().numpy(), (1, 2, 0)))
+plt.savefig(save_path+'/image/genuine_sample.png')
+plt.close()
+
+# 学習結果を画像に変換
 def makeImage(encoder_model, decoder_model, epoch):
     image_tensor = torch.tensor([], device=device)
     with torch.no_grad():
@@ -88,12 +102,18 @@ def makeImage(encoder_model, decoder_model, epoch):
             image_tensor = torch.cat([image_tensor, copy.deepcopy(decoder_output)])
     image_tensor = image_tensor * torch.tensor(255, device=device)
     image_tensor = image_tensor.int()
-    image_tensor = image_tensor.reshape((image_tensor.size(0)*image_tensor.size(1), image_tensor.size(2)))
-    image_tensor = image_tensor.reshape((image_tensor.size(0), 1, 64, 64))
+    image_tensor_c = torch.tensor([], device=device).int()
+    for i in range(image_tensor.size(1)):
+        image_tensor_c = torch.cat([image_tensor_c, image_tensor[:, i, :]])
+    image_tensor_c = image_tensor_c.reshape(image_tensor_c.size(0), 1, 64, 64)
+    image_tensor = image_tensor_c
     
-    plt.imshow(np.transpose(vutils.make_grid(image_tensor, nrow=10).cpu().numpy(), (1, 2, 0)))
+    plt.imshow(np.transpose(vutils.make_grid(image_tensor, nrow=10, pad_value=200).cpu().numpy(), (1, 2, 0)))
     plt.savefig(save_path + '/image/train_sample_{0:03}.png'.format(epoch))
     plt.close()
+
+makeImage(encoder, decoder, 1)
+print('end')
 
 history = {'loss': []}
 start_time = time.time()
@@ -126,7 +146,7 @@ for epoch in range(1, epochs+1):
     print('epoch:{0:04} time:{1} loss:{2:.3}'.format(epoch, time.time()-start_time, sum_loss/len(input_batch)))
 
     # Save Model
-    if epoch % 10 == 3:
+    if epoch % 10 == 0:
         model_name = save_path+"/model/autoencoder_v{0:03}.pt".format(epoch)
         torch.save({
             'encoder_model': encoder.state_dict(),
