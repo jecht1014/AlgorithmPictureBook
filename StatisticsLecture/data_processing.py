@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 class FrequencyDistribution:
     def __init__(self, data: np.ndarray):
         self.data = data
-        data.sort()
+        self.data.sort()
 
-    def frequency_distribution_table(self, sturges: bool=True, width: int=None):
+    def coarse2frequency(self, sturges: bool=True, width: int=None):
         if (sturges):
             width = np.ceil((self.data[-1]-self.data[0])/int(np.ceil(1+np.log2(self.data.shape[0]))))
         left = int(self.data[0])
@@ -34,5 +34,5 @@ with open('data/newborn_weight.csv') as f:
     [data.append(int(row[0])) for row in reader]
 data = np.array(data)
 dosu = FrequencyDistribution(data)
-dosu_bunpu = dosu.frequency_distribution_table()
+dosu_bunpu = dosu.coarse2frequency()
 dosu.plot_frequency(dosu_bunpu[0], dosu_bunpu[1], 'image/frequency_distribution.png')
