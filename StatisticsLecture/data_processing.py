@@ -2,7 +2,7 @@ import numpy as np
 import csv
 import matplotlib.pyplot as plt
 
-class FrequencyDistribution:
+class DataProcessing:
     def __init__(self, data: np.ndarray):
         # 粗データから中央値を出力
         def calc_median(data):
@@ -62,7 +62,7 @@ with open('data/newborn_weight.csv') as f:
     reader = csv.reader(f)
     [data.append(int(row[0])) for row in reader]
 data = np.array(data)
-dosu = FrequencyDistribution(data)
+dosu = DataProcessing(data)
 dosu_bunpu = dosu.coarse2frequency()
 print(dosu.quartile)
 print(dosu.mode)
