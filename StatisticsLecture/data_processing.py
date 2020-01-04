@@ -4,8 +4,24 @@ import matplotlib.pyplot as plt
 
 class FrequencyDistribution:
     def __init__(self, data: np.ndarray):
-        self.data = data
-        self.data.sort()
+        def calc_median(data):
+            if (data.shape[0] % 2 == 1):
+                return data[int(data.shape[0]/2)]
+            else:
+                return (data[int(data.shape[0]/2-1)]+data[int(data.shape[0]/2)])/2
+        if (data.ndim == 1):
+            self.data = data
+            self.data.sort()
+            self.avg = self.data.mean()
+            self.quartile = [0]*3
+            self.quartile[1] = calc_median(self.data)
+            if (data.shape[0] % 2 == 1):
+                self.quartile[0] = calc_median(self.data[:int(data.shape[0]/2)])
+                self.quartile[2] = calc_median(self.data[int(data.shape[0]/2)+1:])
+            else:
+                self.quartile[0] = calc_median(self.data[:int(data.shape[0]/2)])
+                self.quartile[2] = calc_median(self.data[int(data.shape[0]/2):])
+
 
     def coarse2frequency(self, sturges: bool=True, width: int=None):
         if (sturges):
@@ -35,4 +51,5 @@ with open('data/newborn_weight.csv') as f:
 data = np.array(data)
 dosu = FrequencyDistribution(data)
 dosu_bunpu = dosu.coarse2frequency()
+print(dosu.quartile)
 dosu.plot_frequency(dosu_bunpu[0], dosu_bunpu[1], 'image/frequency_distribution.png')
