@@ -12,6 +12,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.utils as vutils
+from tensorboardX import SummaryWriter
 
 class Encoder(nn.Module):
     def __init__(self, input_size, hidden_size):
@@ -51,8 +52,8 @@ test_data = data[:, split_line:, :]
 batch_size = 64
 input_size = 64*64
 hidden_size = 1024
-epochs = 1000
-save_path = 'result/moving_mnist_LSTM_autoencoder_h{0}'.format(hidden_size)
+epochs = 20
+save_path = 'result/moving_mnist_LSTM_autoencoder_h{0}_tb'.format(hidden_size)
 os.makedirs(save_path + '/model', exist_ok=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 mnist_sample = train_data[:, :2, :].to(device)
@@ -71,19 +72,23 @@ def train2batch(data, batch_size):
         input_batch.append(data[:, i:i+batch_size, :])
     return input_batch
 
+# modelのプロット
+with SummaryWriter(save_path+'/runs/encoder') as writer:
+    writer.add_graph(encoder, (mnist_sample, torch.tensor(mnist_sample.size(1))))
+with SummaryWriter(save_path+'/runs/decoder') as writer:
+    writer.add_graph(decoder, (mnist_sample[0:1, :, :], (torch.zeros(1, mnist_sample.size(1), hidden_size).to(device), torch.zeros(1, mnist_sample.size(1), hidden_size).to(device))))
+
 os.makedirs(save_path+'/image', exist_ok=True)
 # 本物の画像の作成
+writer = SummaryWriter(save_path+'/runs')
 real_image = copy.deepcopy(mnist_sample)
-real_image = real_image * torch.tensor(255, device=device)
-real_image = real_image.int()
-real_image_c = torch.tensor([], device=device).int()
+real_image_c = torch.tensor([], device=device)
 for i in range(real_image.size(1)):
     real_image_c = torch.cat([real_image_c, real_image[:, i, :]])
 real_image_c = real_image_c.reshape(real_image_c.size(0), 1, 64, 64)
 real_image = real_image_c
-plt.imshow(np.transpose(vutils.make_grid(real_image, nrow=10, pad_value=200).cpu().numpy(), (1, 2, 0)))
-plt.savefig(save_path+'/image/genuine_sample.png')
-plt.close()
+
+writer.add_image('sample_image', vutils.make_grid(real_image, nrow=10, pad_value=200))
 
 # 学習結果を画像に変換
 def makeImage(encoder_model, decoder_model, epoch):
@@ -96,19 +101,15 @@ def makeImage(encoder_model, decoder_model, epoch):
             decoder_output, decoder_hidden = decoder_model(decoder_input, decoder_hidden)
             decoder_input = decoder_output
             image_tensor = torch.cat([image_tensor, copy.deepcopy(decoder_output)])
-    image_tensor = image_tensor * torch.tensor(255, device=device)
-    image_tensor = image_tensor.int()
-    image_tensor_c = torch.tensor([], device=device).int()
+
+    image_tensor_c = torch.tensor([], device=device)
     for i in range(image_tensor.size(1)):
         image_tensor_c = torch.cat([image_tensor_c, image_tensor[:, i, :]])
     image_tensor_c = image_tensor_c.reshape(image_tensor_c.size(0), 1, 64, 64)
     image_tensor = image_tensor_c
-    
-    plt.imshow(np.transpose(vutils.make_grid(image_tensor, nrow=10, pad_value=200).cpu().numpy(), (1, 2, 0)))
-    plt.savefig(save_path + '/image/train_sample_{0:04}.png'.format(epoch))
-    plt.close()
 
-history = {'loss': []}
+    writer.add_image('sample_output_image', vutils.make_grid(image_tensor, nrow=10, pad_value=200), epoch)
+
 start_time = time.time()
 for epoch in range(1, epochs+1):
     input_batch = train2batch(data, batch_size)
@@ -135,7 +136,7 @@ for epoch in range(1, epochs+1):
 
         sum_loss += loss.cpu().item()
     makeImage(encoder, decoder, epoch)
-    history['loss'].append(sum_loss/len(input_batch))
+    writer.add_scalar('loss/training_loss', sum_loss/len(input_batch), epoch)
     print('epoch:{0:04} time:{1} loss:{2:.3}'.format(epoch, int(time.time()-start_time), sum_loss/len(input_batch)))
 
     # Save Model & History
@@ -148,13 +149,4 @@ for epoch in range(1, epochs+1):
             'decoder_optimizer': decoder_optimizer.state_dict(),
         }, model_name)
 
-        with open(save_path + '/history.pickle', mode='wb') as f:
-            pickle.dump(history, f)
-
-plt.figure()
-plt.title("Autoencoder Loss During Training")
-plt.plot(history['loss'],label="L")
-plt.xlabel("epochs")
-plt.ylabel("Loss")
-plt.savefig(save_path + '/loss.png')
-plt.close()
+writer.close()
