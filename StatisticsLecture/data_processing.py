@@ -27,8 +27,6 @@ class DataProcessing:
                 self.quartile[0] = calc_median(self.data[:int(data.shape[0]/2)])
                 self.quartile[2] = calc_median(self.data[int(data.shape[0]/2):])
 
-            self.mode = None # 最頻値
-
     # 粗データから度数分布を出力
     # sturgesをTrueにするとすとスタージェスの定理に従って階級数を決定
     def coarse2frequency(self, sturges: bool=True, width: int=None):
@@ -46,11 +44,12 @@ class DataProcessing:
             left += width
             right += width
 
-        # 最頻値の格納
-        arg_freq = frequency.argmax()
-        self.mode = class_value[arg_freq]
-
         return (class_value, frequency)
+
+    # 最頻値
+    def mode(self, class_value, frequency):
+        arg_freq = frequency.argmax()
+        return class_value[arg_freq]
     
     # 度数分布表を保存
     def plot_frequency(self, class_value, frequency, save_path):
