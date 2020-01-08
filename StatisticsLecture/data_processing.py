@@ -14,7 +14,6 @@ class DataProcessing:
         
         self.data = data # 粗データ
         self.data.sort()
-        self.avg = self.data.mean() # 平均
         
         # 四分位点
         self.quartile = [0]*3
@@ -45,16 +44,40 @@ class DataProcessing:
 
         return (class_value, frequency)
 
-    # 最頻値
-    def mode(self, class_value, frequency):
-        arg_freq = frequency.argmax()
-        return class_value[arg_freq]
+    def avg(self):
+        return np.average(self.data)
+
+    # 分散
+    def var(self):
+        print(self.avg())
+        return np.sum(np.power(self.data-self.avg(), 2)) / self.data.shape[0]
+
+    # 不偏分散
+    def u_var(self):
+        return np.sum(np.power(self.data-self.avg(), 2)) / (self.data.shape[0]-1)
+
+    # 平均偏差
+    def md(self):
+        return np.sum(np.abs(self.data-self.avg())) / self.data.shape[0]
 
 # 度数分布の処理
 class FrequencyDistribution:
-    def __init__(self, class_value, frequency):
+    def __init__(self, class_value: np.ndarray, frequency: np.ndarray):
         self.class_value = class_value
         self.frequency = frequency
+        self.data_num = np.sum(self.frequency)
+
+    # 平均
+    def avg(self):
+        return np.sum(self.class_value*self.frequency)/self.data_num
+
+    # 分散
+    def var(self):
+        return np.sum(np.power(self.class_value, 2)*self.frequency)/self.data_num - self.avg() ** 2
+
+    # 不偏分散
+    def u_var(self):
+        return np.sum(np.power(self.class_value, 2)*self.frequency)/(self.data_num-1) - self.avg() ** 2
     
     # 最頻値
     def mode(self):
@@ -75,6 +98,12 @@ data = np.array(data)
 dosu = DataProcessing(data)
 class_value, freq = dosu.coarse2frequency()
 #print(dosu.quartile)
+print(dosu.avg())
+print(dosu.var())
+print(dosu.u_var())
+print(dosu.md())
 
 freq_class = FrequencyDistribution(class_value, freq)
+print(freq_class.avg())
+print(freq_class.var())
 freq_class.plot_frequency('image/frequency_distribution.png')
