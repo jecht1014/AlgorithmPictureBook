@@ -30,6 +30,7 @@ class Discrete:
             plt.plot(self.value[i:i+2], [v, v], color='blue')
         plt.plot([self.value[-1], self.value[-1]+1], [1, 1], color='blue')
         plt.savefig(save_path)
+        plt.close()
 
 def bernoulli(p):
     return (np.array([0, 1]), np.array([1-p, p]))
