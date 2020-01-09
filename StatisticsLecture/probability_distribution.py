@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from math import factorial
 
 class Discrete:
     def __init__(self, value: np.ndarray, probability: np.ndarray):
@@ -16,7 +17,7 @@ class Discrete:
     
     # 確率関数のプロット
     def plot_probability_function(self, save_path):
-        plt.bar(self.value, self.probability, width=0.01, color='blue', tick_label=self.value, align="center")
+        plt.bar(self.value, self.probability, width=0.1, color='blue', tick_label=self.value, align="center")
         plt.savefig(save_path)
         plt.close()
 
@@ -77,9 +78,19 @@ class Continuous:
         plt.savefig(save_path)
         plt.close()
 
+# ベルヌーイ分布
 def bernoulli(p):
     return (np.array([0, 1]), np.array([1-p, p]))
 
+# 2項分布
+def binomial(n=18, p=0.1667):
+    def comb(n, r):
+        return factorial(n) / factorial(r) / factorial(n - r)
+    x = np.arange(0, n+1)
+    probability = np.array([comb(n, x_i)*(p**x_i)*(1-p)**(n-x_i) for x_i in x])
+    return (x, probability)
+
+# 正規分布
 def norm(x: np.ndarray, mu=0, sigma2=1):
     return (1/np.sqrt(2*np.pi*sigma2)) * np.exp(-np.power(x-mu, 2)/(2*sigma2))
 
@@ -93,3 +104,8 @@ continuous.plot_probability_function('image/norm_probability.png')
 continuous.plot_distribution_function('image/norm_distribution.png')
 print(continuous.expectation())
 print(continuous.var())
+
+value, probability = binomial()
+discrete = Discrete(value, probability)
+discrete.plot_probability_function('image/binomial_probability.png')
+discrete.plot_distribution_function('image/binomial_distribution.png')
