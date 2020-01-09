@@ -34,40 +34,55 @@ class Discrete:
         plt.close()
 
 class Continuous:
-    def __init__(self, function, x_range: tuple):
+    def __init__(self, function, x_range: tuple, x=None):
         self.function = function
         self.x_range = x_range
+        self.x = x
 
     # 期待値(平均)
-    def expectation(self, num=10000):
-        x = np.linspace(self.x_range[0], self.x_range[1], num)
+    def expectation(self, num=int(1e4), use_x_flag: bool=False):
+        if not use_x_flag:
+            x = np.linspace(self.x_range[0], self.x_range[1], num)
+        else:
+            x = self.x
         y = self.function(x) * x
         e = 0
-        for i in range(num-1):
+        for i in range(x.shape[0]-1):
             e += (x[i+1]-x[i]) * (y[i]+y[i+1]) / 2
         return e
+
     # 2乗平均
-    def expectation2(self, num=10000):
-        x = np.linspace(self.x_range[0], self.x_range[1], num)
+    def expectation2(self, num=int(1e4), use_x_flag: bool=False):
+        if not use_x_flag:
+            x = np.linspace(self.x_range[0], self.x_range[1], num)
+        else:
+            x = self.x
         y = self.function(x) * x * x
         e = 0
-        for i in range(num-1):
+        for i in range(x.shape[0]-1):
             e += (x[i+1]-x[i]) * (y[i]+y[i+1]) / 2
         return e
 
     # 分散
-    def var(self):
-        return self.expectation2()-np.power(self.expectation(), 2)
+    def var(self, use_x_flag: bool=False):
+        return self.expectation2(use_x_flag=use_x_flag)-np.power(self.expectation(use_x_flag=use_x_flag), 2)
+
+    # z-変換
+    def z_transform(self, use_x_flag: bool=False, num=int(1e4)):
+        if use_x_flag:
+            return (self.x - self.expectation(use_x_flag=use_x_flag)) / np.sqrt(self.var(use_x_flag=use_x_flag))
+        else:
+            return (np.linspace(self.x_range[0], self.x_range[1], num) - self.expectation(use_x_flag=use_x_flag)) / np.sqrt(self.var(use_x_flag=use_x_flag))
 
     # 確率関数のプロット
-    def plot_probability_function(self, save_path, num=10000):
+    def plot_probability_function(self, save_path, num=int(1e4)):
         x = np.linspace(self.x_range[0], self.x_range[1], num)
         plt.plot(x, self.function(x))
         plt.savefig(save_path)
         plt.close()
 
     # 分布関数のプロット
-    def plot_distribution_function(self, save_path, num=10000):
+    def plot_distribution_function(self, save_path, num=int(1e4)):
         x = np.linspace(self.x_range[0], self.x_range[1], num)
         y = self.function(x)
         dy = np.array([0])
@@ -134,8 +149,9 @@ continuous.plot_distribution_function('image/exp_distribution.png')
 print(continuous.expectation())
 print(continuous.var())
 
-continuous = Continuous(uniform, (0, 2))
-continuous.plot_probability_function('image/exp_probability.png')
-continuous.plot_distribution_function('image/exp_distribution.png')
+continuous = Continuous(uniform, (0, 2), np.array([0, 1, 2]))
+z = continuous.z_transform(use_x_flag=False)
+continuous.plot_probability_function('image/uni_probability.png')
+continuous.plot_distribution_function('image/uni_distribution.png')
 print(continuous.expectation())
 print(continuous.var())
