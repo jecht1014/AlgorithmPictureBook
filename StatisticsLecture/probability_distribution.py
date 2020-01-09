@@ -99,6 +99,11 @@ def poisson(lamb=3):
         p = np.append(p, np.exp(-lamb)*np.power(lamb, x[-1])/factorial(x[-1]))
     return (x, p)
 
+# 一様乱数
+def uniform(x: np.ndarray, alfa=0, beta=2):
+    p = np.where((x >= alfa) & (x <= beta), 1/(beta-alfa), 0)
+    return p
+
 # 指数分布
 def exponential(x: np.ndarray, lamb=2):
     return (lamb * np.exp(-lamb*x))
@@ -124,6 +129,12 @@ discrete.plot_probability_function('image/poisson_probability.png')
 discrete.plot_distribution_function('image/poisson_distribution.png')
 
 continuous = Continuous(exponential, (0, 4))
+continuous.plot_probability_function('image/exp_probability.png')
+continuous.plot_distribution_function('image/exp_distribution.png')
+print(continuous.expectation())
+print(continuous.var())
+
+continuous = Continuous(uniform, (0, 2))
 continuous.plot_probability_function('image/exp_probability.png')
 continuous.plot_distribution_function('image/exp_distribution.png')
 print(continuous.expectation())
