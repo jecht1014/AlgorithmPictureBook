@@ -90,6 +90,19 @@ def binomial(n=18, p=0.1667):
     probability = np.array([comb(n, x_i)*(p**x_i)*(1-p)**(n-x_i) for x_i in x])
     return (x, probability)
 
+# ポアソン分布
+def poisson(lamb=3):
+    x = np.array([0, 1])
+    p = np.array([np.exp(-lamb)*np.power(lamb, 0)/factorial(0), np.exp(-lamb)*np.power(lamb, 1)/factorial(1)])
+    while(p[-2] < p[-1] or (p[-2] >= p[-1] and p[-1] > 1e-6)):
+        x = np.append(x, x[-1]+1)
+        p = np.append(p, np.exp(-lamb)*np.power(lamb, x[-1])/factorial(x[-1]))
+    return (x, p)
+
+# 指数分布
+def exponential(x: np.ndarray, lamb=2):
+    return (lamb * np.exp(-lamb*x))
+
 # 正規分布
 def norm(x: np.ndarray, mu=0, sigma2=1):
     return (1/np.sqrt(2*np.pi*sigma2)) * np.exp(-np.power(x-mu, 2)/(2*sigma2))
@@ -105,7 +118,13 @@ continuous.plot_distribution_function('image/norm_distribution.png')
 print(continuous.expectation())
 print(continuous.var())
 
-value, probability = binomial()
+value, probability = poisson()
 discrete = Discrete(value, probability)
-discrete.plot_probability_function('image/binomial_probability.png')
-discrete.plot_distribution_function('image/binomial_distribution.png')
+discrete.plot_probability_function('image/poisson_probability.png')
+discrete.plot_distribution_function('image/poisson_distribution.png')
+
+continuous = Continuous(exponential, (0, 4))
+continuous.plot_probability_function('image/exp_probability.png')
+continuous.plot_distribution_function('image/exp_distribution.png')
+print(continuous.expectation())
+print(continuous.var())
