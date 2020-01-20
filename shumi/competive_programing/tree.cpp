@@ -15,8 +15,8 @@ class Tree {
         int node_num;
         vector<Node> node;
         
-        Tree(vector<vector<int>> hen) {
-            root = 0;
+        Tree(vector<vector<int>> hen, int r) {
+            root = r;
             node_num = hen.size();
             node = vector<Node>(hen.size());
             
@@ -136,12 +136,39 @@ vector<set<int>> tree_vertex_partial_set(Tree tree) {
     return partial_set;
 }
 
+// 入力のnodeと全てのnodeの距離を幅優先探索で計算する関数
+vector<int> tree_dist_bfs(Tree tree, Node node) {
+    vector<int> dist(tree.node_num, -1);
+    queue<pair<int, Node>> que;
+    que.push(make_pair(0, node));
+    while(!que.empty()) {
+        pair<int, Node> p = que.front();
+        que.pop();
+        dist[p.second.value] = p.first;
+        
+        // 親ノードの探索
+        // 親がいなくて未探索の場合
+        if (p.second.parent != -1)
+            if (dist[p.second.parent] == -1)
+                que.push(make_pair(p.first+1, tree.node[p.second.parent]));
+        
+        // 子ノードの探索
+        for (int i = 0; i < p.second.children.size(); i++)
+            if (dist[p.second.children[i]] == -1)
+                que.push(make_pair(p.first+1, tree.node[p.second.children[i]]));
+    }
+    
+    return dist;
+}
+
 int main() {
     //int n = 3;
     vector<vector<int>> hen{{1}, {0, 2}, {1}};
     
-    Tree tree(hen);
+    Tree tree(hen, 0);
     for (int i = 0; i < tree.node.size(); i++) {
         cout << tree.node[i].parent << endl;
     }
+
+    vector<int> v_dist = tree_dist_bfs(tree, tree.node[0]);
 }
