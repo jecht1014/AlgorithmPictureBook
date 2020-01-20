@@ -39,6 +39,19 @@ ll modpow(ll a, ll n, ll mod) {
     return res;
 }
 
+// 逆元の計算
+ll modinv(ll a, ll mod) {
+    ll b = mod, u = 1, v = 0;
+    while (b) {
+        ll t = a / b;
+        a -= t * b; swap(a, b);
+        u -= t * v; swap(u, v);
+    }
+    u %= mod;
+    if (u < 0) u += mod;
+    return u;
+}
+
 int main() {
     COMinit();
     cout << COM(10, 3) << endl;
