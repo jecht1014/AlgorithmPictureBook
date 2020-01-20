@@ -23,3 +23,23 @@ ll gcd(ll a, ll b) {
 ll lcm(ll a, ll b) {
     return a * b / gcd(a, b);
 }
+
+// 素因数分解
+vector<int> prime_factrization(ll n) {
+    vector<int> prime_num(n+1);
+    for (int i = 2; i*i <= n; i++) {
+        while(n % i == 0) {
+            prime_num[i]++;
+            n /= i;
+        }
+    }
+    if (n != 1)
+        prime_num[n] = 1;
+    return prime_num;
+}
+
+int main() {
+    vector<int> prime_num = prime_factrization(10);
+    for (int i = 0; i <= 10; i++)
+        cout << prime_num[i] << " ";
+}
