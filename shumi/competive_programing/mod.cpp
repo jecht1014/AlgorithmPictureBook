@@ -39,6 +39,18 @@ ll modpow(ll a, ll n, ll mod) {
     return res;
 }
 
+// 順列
+long long mod_nPr(long long n, long long r, long long mod) {
+    if (n <= 0 || r <= 0)
+        return 1;
+    else {
+        long long result = 1;
+        for (int i = n; i > n-r; i--)
+            result = (result * i) % mod;
+        return result;
+    }
+}
+
 // 逆元の計算
 ll modinv(ll a, ll mod) {
     ll b = mod, u = 1, v = 0;
