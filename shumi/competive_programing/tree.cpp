@@ -161,6 +161,35 @@ vector<int> tree_dist_bfs(Tree tree, Node node) {
     return dist;
 }
 
+// uniou-find木 経路圧縮のみ
+struct UnionFind {
+    vector<int> par; // par[i]:iの親の番号 根のときはpar[i]=i
+
+    //最初は全てが根であるとして初期化
+    UnionFind(int N) : par(N) {
+        for(int i = 0; i < N; i++) par[i] = i;
+    }
+
+    // データxが属する木の根を再帰で得る：root(x) = {xの木の根}
+    int root(int x) {
+        if (par[x] == x) return x;
+        return par[x] = root(par[x]);
+    }
+
+    // xとyの木を併合
+    void unite(int x, int y) {
+        int rx = root(x);
+        int ry = root(y);
+        if (rx == ry) return;
+        par[rx] = ry;
+    }
+    
+     // 2つのデータx, yが属する木が同じならtrueを返す
+    bool same(int x, int y) {
+        return root(x) == root(y);
+    }
+};
+
 int main() {
     //int n = 3;
     vector<vector<int>> hen{{1}, {0, 2}, {1}};
