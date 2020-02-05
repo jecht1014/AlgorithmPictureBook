@@ -40,6 +40,31 @@ class Tree {
                 }
             }
         }
+
+        // 重み付き辺有
+        Tree(vector<vector<int>> hen, vector<vector<long long>> w, int r) {
+            root = r;
+            node_num = hen.size();
+            node = vector<Node>(hen.size());
+            
+            queue<int> v;
+            v.push(root);
+            node[root].parent = -1;
+            while(!v.empty()) {
+                int tyoten = v.front();
+                node[tyoten].value = tyoten;
+                v.pop();
+                for (int i = 0; i < hen[tyoten].size(); i++) {
+                    int child = hen[tyoten][i];
+                    if (child != node[tyoten].parent) {
+                        node[tyoten].children.push_back(child);
+                        node[tyoten].edge_value.push_back(w[tyoten][i]);
+                        node[child].parent = tyoten;
+                        v.push(child);
+                    }
+                }
+            }
+        }
 };
 
 // 2つの頂点を入力として与えることで、最近共通祖先(lca)を求める
