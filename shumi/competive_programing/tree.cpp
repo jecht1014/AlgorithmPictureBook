@@ -15,10 +15,10 @@ class Tree {
         int node_num;
         vector<Node> node;
         
-        Tree(vector<vector<int>> hen, int r) {
+        Tree(vector<vector<int>> edge, int r) {
             root = r;
-            node_num = hen.size();
-            node = vector<Node>(hen.size());
+            node_num = edge.size();
+            node = vector<Node>(edge.size());
             
             queue<int> v;
             v.push(root);
@@ -28,8 +28,8 @@ class Tree {
                 int tyoten = v.front();
                 node[tyoten].value = tyoten;
                 v.pop();
-                for (int i = 0; i < hen[tyoten].size(); i++) {
-                    int child = hen[tyoten][i];
+                for (int i = 0; i < edge[tyoten].size(); i++) {
+                    int child = edge[tyoten][i];
                     if (child != node[tyoten].parent) {
                         node[tyoten].children.push_back(child);
                         node[tyoten].edge_value.push_back(edge_num);
@@ -42,10 +42,10 @@ class Tree {
         }
 
         // 重み付き辺有
-        Tree(vector<vector<int>> hen, vector<vector<long long>> w, int r) {
+        Tree(vector<vector<int>> edge, vector<vector<long long>> w, int r) {
             root = r;
-            node_num = hen.size();
-            node = vector<Node>(hen.size());
+            node_num = edge.size();
+            node = vector<Node>(edge.size());
             
             queue<int> v;
             v.push(root);
@@ -54,8 +54,8 @@ class Tree {
                 int tyoten = v.front();
                 node[tyoten].value = tyoten;
                 v.pop();
-                for (int i = 0; i < hen[tyoten].size(); i++) {
-                    int child = hen[tyoten][i];
+                for (int i = 0; i < edge[tyoten].size(); i++) {
+                    int child = edge[tyoten][i];
                     if (child != node[tyoten].parent) {
                         node[tyoten].children.push_back(child);
                         node[tyoten].edge_value.push_back(w[tyoten][i]);
