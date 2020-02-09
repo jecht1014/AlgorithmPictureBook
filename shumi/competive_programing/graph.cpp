@@ -62,10 +62,26 @@ class Graph {
                         shortest_path[node[i].next_node[j]] = min(shortest_path[node[i].next_node[j]], shortest_path[i]+node[i].edge_value[j]);
             return shortest_path;
         }
+
+        // 負の閉路検出
+        bool has_negative_cycle() {
+            vector<long long> shortest_path(node_num, INF);
+            shortest_path[0] = 0;
+            for (int k = 0; k < node_num; k++)
+                for (int i = 0; i < node_num; i++)
+                    for (int j = 0; j < node[i].next_node.size(); j++)
+                        if (shortest_path[node[i].next_node[j]] > shortest_path[i]+node[i].edge_value[j]) {
+                            shortest_path[node[i].next_node[j]] = shortest_path[i]+node[i].edge_value[j];
+                            if (k == node_num-1)
+                                return true;
+                        }
+            return false;
+        }
 };
 
 int main() {
     vector<vector<int>> hen{{1, 2}, {0, 3}, {0}};
     Graph graph(hen);
     vector<long long> shortest_path = graph.bellman_ford(0);
+    print(has_negative_cycle());
 }
