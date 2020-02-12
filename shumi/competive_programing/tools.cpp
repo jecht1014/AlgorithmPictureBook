@@ -38,6 +38,14 @@ vector<int> prime_factrization(ll n) {
     return prime_num;
 }
 
+// char型からint型に変換
+int ctoi(char c) {
+	if (c >= '0' && c <= '9') {
+		return c - '0';
+	}
+	return 0;
+}
+
 int main() {
     vector<int> prime_num = prime_factrization(10);
     for (int i = 0; i <= 10; i++)
