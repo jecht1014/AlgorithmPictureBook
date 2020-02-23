@@ -9,7 +9,8 @@ const ll MOD = 1000000007;
 
 ll fac[MAX], finv[MAX], inv[MAX];
 
-// テーブルを作る前処理
+// コンビネーションのテーブルを作る前処理
+// ll COMとワンセット
 void COMinit() {
     fac[0] = fac[1] = 1;
     finv[0] = finv[1] = 1;
@@ -62,6 +63,22 @@ ll modinv(ll a, ll mod) {
     u %= mod;
     if (u < 0) u += mod;
     return u;
+}
+
+// コンビネーションの計算(nCk)
+long long modcom(long long n, long long k, long long mod) {
+    if (n < k) return 0;
+    if (n < 0 || k < 0) return 0;
+    long long nPk = mod_nPr(n, k, mod);
+
+    vector<long long> finv(k+1, 0), inv(k+1, 0);
+    finv[0] = finv[1] = 1;
+    inv[1] = 1;
+    for (int i = 2; i < k+1; i++){
+        inv[i] = mod - inv[mod%i] * (mod / i) % mod;
+        finv[i] = finv[i - 1] * inv[i] % mod;
+    }
+    return nPk * finv[k] % mod;
 }
 
 int main() {
