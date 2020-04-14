@@ -39,6 +39,25 @@ vector<vector<long long>> warshall_floyd(vector<vector<long long>> graph) {
     return graph;
 }
 
+//ベルマンフォード法(負の閉路がある場合は使えない) O(V*E)
+//最短経路探索
+struct edge {
+    int from;
+    int to;
+    long long cost;
+};
+long long INF = 1e10;
+vector<long long> bellman_ford(vector<edge> es, int start_point, int vertex_num) {
+    vector<long long> shortest_path(vertex_num, INF);
+    shortest_path[start_point] = 0;
+    for (int i = 0; i < vertex_num-1; i++) {
+        for (int j = 0; j < es.size(); j++) {
+            shortest_path[es[j].to] = min(shortest_path[es[j].to], shortest_path[es[j].from]+es[j].cost);
+        }
+    }
+    return shortest_path;
+}
+
 int main() {
     vector<vector<int>> hen{{1, 2}, {0, 3}, {0}};
     vector<set<int>> path = ne_path(hen, 0);
