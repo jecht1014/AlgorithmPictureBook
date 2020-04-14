@@ -14,70 +14,40 @@ vector<vector<long long>> warshall_floyd(vector<vector<long long>> graph) {
     return graph;
 }
 
-class Node {
-    public:
-        vector<long long> edge_value;
-        vector<int> next_node;
-        long long value = 0;
+//ベルマンフォード法(負の閉路がある場合は使えない) O(V*E)
+//最短経路探索
+struct edge {
+    int from;
+    int to;
+    long long cost;
 };
+long long INF = 1e10;
+vector<long long> bellman_ford(vector<edge> es, int start_point, int vertex_num) {
+    vector<long long> shortest_path(vertex_num, INF);
+    shortest_path[start_point] = 0;
+    for (int i = 0; i < vertex_num-1; i++) {
+        for (int j = 0; j < es.size(); j++) {
+            shortest_path[es[j].to] = min(shortest_path[es[j].to], shortest_path[es[j].from]+es[j].cost);
+        }
+    }
+    return shortest_path;
+}
 
-class Graph {
-    public:
-        int node_num;
-        vector<Node> node;
-        
-        // 辺の重みを1で初期化
-        Graph(vector<vector<int>> edge) {
-            node_num = edge.size();
-            node = vector<Node>(edge.size());
-            for (int i = 0; i < edge.size(); i++) {
-                node[i].value = i;
-                for (int j = 0; j < edge[i].size(); j++) {
-                    node[i].push_back(edge[i][j]);
-                    node[i].push_back(1);
-                }
+// 負の閉路の探索 O(V*E)
+bool find_negative_loop(vector<edge> es, int start_point, int vertex_num) {
+    vector<long long> shortest_path(vertex_num, INF);
+    shortest_path[start_point] = 0;
+    for (int i = 0; i < vertex_num; i++) {
+        for (int j = 0; j < es.size(); j++) {
+            if (shortest_path[es[j].to] > shortest_path[es[j].from]+es[j].cost) {
+                shortest_path[es[j].to] = shortest_path[es[j].from]+es[j].cost;
+                if (i == vertex_num-1)
+                    return true;
             }
         }
-
-        // 重み付き辺有
-        Graph(vector<vector<int>> edge, vector<vector<long long>> edge_weight) {
-            node_num = edge.size();
-            node = vector<Node>(edge.size());
-            for (int i = 0; i < edge.size(); i++) {
-                node[i].value = i;
-                for (int j = 0; j < edge[i].size(); j++) {
-                    node[i].push_back(edge[i][j]);
-                    node[i].push_back(edge_weight[i][j]);
-                }
-            }
-        }
-
-        // ベルマンフォード法(あるノードから全てのノードの最短経路探索)
-        vector<long long> bellman_ford(int n) {
-            vector<long long> shortest_path(node_num, INF);
-            shortest_path[n] = 0;
-            for (int _ = 0; _ < node_num-1; _++)
-                for (int i = 0; i < node_num; i++)
-                    for (int j = 0; j < node[i].next_node.size(); j++)
-                        shortest_path[node[i].next_node[j]] = min(shortest_path[node[i].next_node[j]], shortest_path[i]+node[i].edge_value[j]);
-            return shortest_path;
-        }
-
-        // 負の閉路検出
-        bool has_negative_cycle() {
-            vector<long long> shortest_path(node_num, INF);
-            shortest_path[0] = 0;
-            for (int k = 0; k < node_num; k++)
-                for (int i = 0; i < node_num; i++)
-                    for (int j = 0; j < node[i].next_node.size(); j++)
-                        if (shortest_path[node[i].next_node[j]] > shortest_path[i]+node[i].edge_value[j]) {
-                            shortest_path[node[i].next_node[j]] = shortest_path[i]+node[i].edge_value[j];
-                            if (k == node_num-1)
-                                return true;
-                        }
-            return false;
-        }
-};
+    }
+    return false;
+}
 
 int main() {
     vector<vector<int>> hen{{1, 2}, {0, 3}, {0}};
