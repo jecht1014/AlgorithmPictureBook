@@ -49,6 +49,36 @@ bool find_negative_loop(vector<edge> es, int start_point, int vertex_num) {
     return false;
 }
 
+// ダイクストラ法(隣接リスト　負の重みなし) O(E log V)
+// 最短経路探索
+// pair<long long, int> は(cost, vertex)の組み合わせ
+struct edge {
+    int to;
+    long long cost;
+};
+long long INF = 1e10;
+vector<long long> dijkstra(vector<vector<edge>> es, int start_point) {
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> que;
+    vector<long long> shortest_path(es.size(), INF);
+    shortest_path[start_point] = 0;
+    que.push(make_pair(0, start_point));
+
+    while(!que.empty()) {
+        pair<long long, int> min_pair = que.top();
+        que.pop();
+        if (shortest_path[min_pair.second] < min_pair.first)
+            continue;
+        for (int i = 0; i < es[min_pair.second].size(); i++) {
+            edge e = es[min_pair.second][i];
+            if (shortest_path[e.to] > shortest_path[min_pair.second]+e.cost) {
+                shortest_path[e.to] = shortest_path[min_pair.second]+e.cost;
+                que.push(make_pair(shortest_path[e.to], e.to));
+            }
+        }
+    }
+    return shortest_path;
+}
+
 int main() {
     vector<vector<int>> hen{{1, 2}, {0, 3}, {0}};
     Graph graph(hen);
