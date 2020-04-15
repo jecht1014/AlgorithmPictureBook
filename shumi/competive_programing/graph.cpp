@@ -21,7 +21,6 @@ struct edge {
     int to;
     long long cost;
 };
-long long INF = 1e10;
 vector<long long> bellman_ford(vector<edge> es, int start_point, int vertex_num) {
     vector<long long> shortest_path(vertex_num, INF);
     shortest_path[start_point] = 0;
@@ -56,7 +55,6 @@ struct edge {
     int to;
     long long cost;
 };
-long long INF = 1e10;
 vector<long long> dijkstra(vector<vector<edge>> es, int start_point) {
     priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> que;
     vector<long long> shortest_path(es.size(), INF);
