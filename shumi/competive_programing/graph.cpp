@@ -2,8 +2,10 @@
 using namespace std;
 #define INF 10e12
 
-// graphは隣接表現
+// graphは隣接リスト
 vector<vector<long long>> warshall_floyd(vector<vector<long long>> graph) {
+    for (int i = 0; i < graph.size(); i++)
+        graph[i][i] = 0;
     for (int k = 0; k < graph.size(); k++){
         for (int i = 0; i < graph.size(); i++) {
             for (int j = 0; j < graph.size(); j++) {
