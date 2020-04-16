@@ -115,6 +115,46 @@ vector<int> restore_shortest_path(vector<vector<edge>> graph, vector<long long> 
     }
 }
 
+// prim法による最小全域木
+vector<vector<edge>> prim(vector<vector<edge>> graph) {
+    vector<vector<edge>> minimum_spanning_tree(graph.size());
+    vector<bool> used(graph.size(), false);
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> minimum_edge_que;
+    minimum_edge_que.push(make_pair(0, 0));
+    int count_used = 0;
+    int before_vertex = -1;
+
+    while(true) {
+        pair<long long, int> add_vertex;
+        while(!minimum_edge_que.empty()) {
+            add_vertex = minimum_edge_que.top();
+            minimum_edge_que.pop();
+            if (!used[add_vertex.second]) {
+                used[add_vertex.second] = true;
+                count_used++;
+                if (before_vertex != -1) {
+                    edge e = {add_vertex.second, add_vertex.first};
+                    minimum_spanning_tree[before_vertex].push_back(e);
+                    e.to = before_vertex;
+                    minimum_spanning_tree[add_vertex.second].push_back(e);
+                }
+                before_vertex = add_vertex.second;
+                break;
+            }
+        }
+
+        if (count_used == graph.size())
+            break;
+
+        for (int i = 0; i < graph[add_vertex.second].size(); i++) {
+            edge e = graph[add_vertex.second][i];
+            if (!used[e.to])
+                minimum_edge_que.push(make_pair(e.cost, e.to));
+        }
+    }
+    return minimum_spanning_tree;
+}
+
 int main() {
     vector<vector<int>> hen{{1, 2}, {0, 3}, {0}};
     Graph graph(hen);
