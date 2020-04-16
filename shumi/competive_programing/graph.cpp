@@ -79,6 +79,42 @@ vector<long long> dijkstra(vector<vector<edge>> es, int start_point) {
     return shortest_path;
 }
 
+// 有効グラフのパスを逆にしたグラフを返す関数
+vector<vector<edge>> get_reverse_graph(vector<vector<edge>> graph) {
+    vector<vector<edge>> reverse_graph(graph.size());
+    for (int i = 0; i < graph.size(); i++) {
+        for (int j = 0; j < graph[i].size(); j++) {
+            edge e = {i, graph[i][j].cost};
+            reverse_graph[graph[i][j].to].push_back(e);
+        }
+    }
+    return reverse_graph;
+}
+
+// グラフ隣接リストの最短経路復元
+vector<int> restore_shortest_path(vector<vector<edge>> graph, vector<long long> shortest_path, int start_point, int end_point) {
+    vector<vector<edge>> reverse_graph = get_reverse_graph(graph);
+    queue<vector<int>> current_restored_path_que;
+    que.push(vector<int>(1, end_point));
+    while(true) {
+        vector<int> restored_path = current_restored_path_que.front();
+        int current_vertex  = restored_path[restored_path.size()-1];
+        current_restored_path_que.pop();
+        for (int i = 0; i < reverse_graph[current_vertex].size(); i++) {
+            edge e = reverse_graph[current_vertex][i];
+            if (shortest_path[current_vertex]-e.cost == shortest_path[e.to]) {
+                restored_path.push_back(e.to);
+                current_restored_path_que.push(restored_path);
+                if (e.to == start_point) {
+                    vector<int> result = current_restored_path_que.back();
+                    reverse(result.begin(), result.end());
+                    return result;
+                }
+            }
+        }
+    }
+}
+
 int main() {
     vector<vector<int>> hen{{1, 2}, {0, 3}, {0}};
     Graph graph(hen);
