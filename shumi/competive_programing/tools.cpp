@@ -52,6 +52,18 @@ vector<int> prime_factrization(ll n) {
     return prime_num;
 }
 
+// 約数列挙
+vector<long long> divisor(long long n) {
+    vector<long long> res;
+    for (int i = 1; i*i <= n; i++) {
+        if (n % i == 0) {
+            res.push_back(i);
+            if (i != n / i)
+                res.push_back(n / i);
+        }
+    }
+}
+
 // 素数判定
 bool is_prime(long long n) {
     if (n <= 1)
