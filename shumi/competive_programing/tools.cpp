@@ -24,6 +24,20 @@ ll lcm(ll a, ll b) {
     return a * b / gcd(a, b);
 }
 
+// 拡張ユークリッド互除法(ax+by=cとなるようなx,yと最小のcを求めるプログラム)
+long long extgcd(long long a, long long b, long long& x, long long& y) {
+    long long c = a;
+    if (b != 0) {
+        c = extgcd(b, a%b, y, x);
+        y -= (a / b) * x;
+    }
+    else {
+        x = 1;
+        y = 0;
+    }
+    return c;
+}
+
 // 素因数分解
 vector<int> prime_factrization(ll n) {
     vector<int> prime_num(n+1);
