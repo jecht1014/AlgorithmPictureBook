@@ -62,6 +62,7 @@ vector<long long> divisor(long long n) {
                 res.push_back(n / i);
         }
     }
+    return res;
 }
 
 // 素数判定
@@ -72,6 +73,18 @@ bool is_prime(long long n) {
         if (n % i == 0)
             return false;
     return true;
+}
+
+// エラストネスの篩(n以下の素数判定)
+vector<bool> sieve_of_eratosthenes(long long n) {
+    vector<bool> is_primes(n+1, true);
+    is_primes[0] = false;
+    is_primes[1] = false;
+    for (int i = 2; i*i <= n; i++)
+        if (is_primes[i])
+            for (int j = 2*i; j <= n; j += i)
+                is_primes[j] = false;
+    return is_primes;
 }
 
 // char型からint型に変換
