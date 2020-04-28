@@ -52,6 +52,16 @@ vector<int> prime_factrization(ll n) {
     return prime_num;
 }
 
+// 素数判定
+bool is_prime(long long n) {
+    if (n <= 1)
+        return false;
+    for (int i = 2; i * i <= n; i++)
+        if (n % i == 0)
+            return false;
+    return true;
+}
+
 // char型からint型に変換
 int ctoi(char c) {
 	if (c >= '0' && c <= '9') {
