@@ -1,5 +1,5 @@
 # 高速併合アルゴリズム
-class Quick_Find:
+class Quick_Union:
     def __init__(self, N):
         self.N = N
         self.connected_componet = [i for i in range(N)]
