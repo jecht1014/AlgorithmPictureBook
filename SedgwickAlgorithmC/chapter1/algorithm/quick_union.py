@@ -1,4 +1,4 @@
-# 高速併合アルゴリズム
+# 高速合併アルゴリズム
 class Quick_Union:
     def __init__(self, N):
         self.N = N
