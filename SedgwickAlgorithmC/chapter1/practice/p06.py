@@ -11,7 +11,6 @@ class Weighted_Quick_Union:
         return self.find(self.connected_componet[a])
     
     def union(self, a, b):
-        self.reference_count = 0
         a_root = self.find(a)
         b_root = self.find(b)
         if (a_root != b_root):
