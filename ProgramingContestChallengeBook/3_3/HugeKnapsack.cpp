@@ -22,7 +22,7 @@ int main() {
         cin >> v[i];
     cin >> W;
 
-    // 品物の前半部分の全列挙
+    // 品物の前半部分の全列挙O(2^(n/2))
     int n2 = n / 2;
     for (int i = 0; i < 1 << n2; i++) {
         ll sw = 0, sv = 0;
@@ -44,7 +44,7 @@ int main() {
         }
     }
 
-    // 後ろ半分を全列挙
+    // 後ろ半分を全列挙し探索
     ll res = 0;
     for (int i = 0; i < 1 << (n-n2); i++) {
         ll sw = 0, sv = 0;
