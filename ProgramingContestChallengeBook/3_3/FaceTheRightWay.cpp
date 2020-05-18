@@ -7,11 +7,6 @@ http://poj.org/problem?id=3276
 using namespace std;
 typedef long long ll;
 
-#include <iostream>
-#include <vector>
-using namespace std;
-typedef long long ll;
-
 int main() {
     int N;
     cin >> N;
