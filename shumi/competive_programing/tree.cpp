@@ -114,7 +114,7 @@ vector<set<pair<int, int>>> tree_edge_partial_set(Tree tree) {
 }
 
 // 上のbitsetバージョン
-vector<bitset<59>> tree_edge_partial_set(Tree tree) {
+vector<bitset<59>> tree_edge_partial_set2(Tree tree) {
     vector<bitset<59>> partial_set(tree.node_num);
     queue<Node> value;
     value.push(tree.node[tree.root]);
