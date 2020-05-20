@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
 class Node {
     public:
@@ -215,6 +216,7 @@ struct UnionFind {
     }
 };
 
+// Range Minimum Query
 const ll INF = 1e15;
 struct RMQ {
     int leaf_node_num;
@@ -261,6 +263,33 @@ struct RMQ {
             ll vl = query(a, b, k*2 + 1, l, (l+r) / 2);
             ll vr = query(a, b, k*2 + 2, (l+r) / 2, r);
             return min(vl, vr);
+        }
+    }
+};
+
+// Binary Indexed Tree
+struct BIT {
+    int N;
+    vector<int> values;
+
+    // [1,n]
+    BIT(int n) : values(n+1, 0) {
+        N = n;
+    }
+
+    int sum(int i) {
+        int s = 0;
+        while (i > 0) {
+            s += values[i];
+            i -= i & -i; // 一番下の位の1を0に変える
+        }
+        return s;
+    }
+
+    void add(int i, int x) {
+        while (i <= N) {
+            values[i] += x;
+            i += i & -i;
         }
     }
 };
