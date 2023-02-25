@@ -51,4 +51,5 @@ class DiagonalElementTestCase(unittest.TestCase):
     diagonal_element = [1, 5, 9]
 
     def test_diagonal_element(self):
+        """対角成分が正しいかのテスト"""
         self.assertEqual(self.square_matrix.diagonal_element(), self.diagonal_element)
