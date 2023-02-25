@@ -76,6 +76,37 @@ class Matrix:
         """
         [print(row) for row in self.matrix]
 
+    def rows(self) -> int:
+        """行数
+
+        Returns
+        -------
+        int
+            行数
+        """
+        return len(self.matrix)
+
+    def columns(self) -> int:
+        """列数
+
+        Returns
+        -------
+        int
+            列数
+        """
+        return len(self.matrix[0])
+
+    def is_square_matrix(self) -> bool:
+        """正方行列(列数 == 行数)かどうか
+
+        Returns
+        -------
+        bool
+            正方行列か
+        """
+        return self.rows() == self.columns()
+
+
 matrix = Matrix.zero_matrix(2, 3)
 print(matrix.to_string())
 print(Matrix([[0, 0], [0, 0], [0, 0]]).to_string())

@@ -30,3 +30,15 @@ class ZeroMatrixTestCase(unittest.TestCase):
 
     def test_zero_matrix(self):
         self.assertEqual(self.zero_matrix, Matrix.zero_matrix(self.rows, self.columns))
+
+
+# is_square_matrixのテスト
+class IsSquareMatrixTestCase(unittest.TestCase):
+    square_matrix = Matrix([[0, 1], [2, 3]])
+    not_square_matrix = Matrix([[0, 1], [2, 3], [4, 5]])
+
+    def test_is_square_matrix(self):
+        self.assertTrue(self.square_matrix.is_square_matrix())
+
+    def test_is_not_square_matrix(self):
+        self.assertFalse(self.not_square_matrix.is_square_matrix())
