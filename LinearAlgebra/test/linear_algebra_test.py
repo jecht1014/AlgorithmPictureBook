@@ -50,13 +50,13 @@ class DiagonalElementTestCase(unittest.TestCase):
     square_matrix = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]).to_square_matrix()
     diagonal_element = [1, 5, 9]
 
-    upper_triangular_matrix = Matrix([[1, 2], [0, 4]]).to_square_matrix()
-    lower_triangular_matrix = Matrix([[1, 0], [3, 4]]).to_square_matrix()
-    diagonal_matrix = Matrix([[1, 0], [0, 4]]).to_square_matrix()
-
     def test_diagonal_element(self):
         """対角成分が正しいかのテスト"""
         self.assertEqual(self.square_matrix.diagonal_element(), self.diagonal_element)
+
+    upper_triangular_matrix = Matrix([[1, 2], [0, 4]]).to_square_matrix()
+    lower_triangular_matrix = Matrix([[1, 0], [3, 4]]).to_square_matrix()
+    diagonal_matrix = Matrix([[1, 0], [0, 4]]).to_square_matrix()
 
     def test_is_upper_triangular_matrix(self):
         """上三角行列の時にtrueを返すかのテスト"""
