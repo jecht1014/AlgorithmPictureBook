@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "linearalgebra"
+version = "0.1.0"
+description = ""
+authors = ["jecht1014 <hayabusa_tukasa1014@yahoo.ne.jp>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
