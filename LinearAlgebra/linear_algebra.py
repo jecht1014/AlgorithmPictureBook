@@ -32,3 +32,13 @@ class Matrix:
             行列が等しいか
         """
         return self.matrix == matrix.matrix
+
+    def to_string(self) -> str:
+        """行列を文字列で表示
+
+        Returns
+        -------
+        str
+            行列
+        """
+        [print(row) for row in self.matrix]
