@@ -50,6 +50,34 @@ class DiagonalElementTestCase(unittest.TestCase):
     square_matrix = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]).to_square_matrix()
     diagonal_element = [1, 5, 9]
 
+    upper_triangular_matrix = Matrix([[1, 2], [0, 4]]).to_square_matrix()
+    lower_triangular_matrix = Matrix([[1, 0], [3, 4]]).to_square_matrix()
+    diagonal_matrix = Matrix([[1, 0], [0, 4]]).to_square_matrix()
+
     def test_diagonal_element(self):
         """対角成分が正しいかのテスト"""
         self.assertEqual(self.square_matrix.diagonal_element(), self.diagonal_element)
+
+    def test_is_upper_triangular_matrix(self):
+        """上三角行列の時にtrueを返すかのテスト"""
+        self.assertTrue(self.upper_triangular_matrix.is_upper_triangular_matrix())
+
+    def test_is_not_upper_triangular_matrix(self):
+        """上三角行列ではない行列を与えた時にfalseを返すかテスト"""
+        self.assertFalse(self.lower_triangular_matrix.is_upper_triangular_matrix())
+
+    def test_is_lower_triangular_matrix(self):
+        """下三角行列の時にtrueを返すかのテスト"""
+        self.assertTrue(self.lower_triangular_matrix.is_lower_triangular_matrix())
+
+    def test_is_not_lower_triangular_matrix(self):
+        """下三角行列ではない行列を与えた時にfalseを返すかテスト"""
+        self.assertFalse(self.upper_triangular_matrix.is_lower_triangular_matrix())
+
+    def test_is_diagronal_matrix(self):
+        """対角行列の時にtrueを返すかのテスト"""
+        self.assertTrue(self.diagonal_matrix.is_diagronal_matrix())
+
+    def test_is_not_diagronal_matrix(self):
+        """対角行列ではない行列を与えた時にfalseを返すかテスト"""
+        self.assertTrue(self.diagonal_matrix.is_diagronal_matrix())

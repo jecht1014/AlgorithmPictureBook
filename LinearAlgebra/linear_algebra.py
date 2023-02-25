@@ -147,9 +147,44 @@ class SquareMatrix(Matrix):
         """
         return [self.matrix[i][i] for i in range(self.rows())]
 
-matrix = Matrix.zero_matrix(2, 3)
-print(matrix.to_string())
-print(Matrix([[0, 0], [0, 0], [0, 0]]).to_string())
+    def is_upper_triangular_matrix(self) -> bool:
+        """上三角行列かどうか
 
-print(matrix.matrix)
-print(Matrix([[0, 0], [0, 0], [0, 0]]).matrix)
+        Returns
+        -------
+        bool
+            上三角行列か
+        """
+        for row in range(self.rows()):
+            for column in range(self.columns()):
+                if row > column and self.matrix[row][column] != 0:
+                    return False
+        return True
+
+    def is_lower_triangular_matrix(self) -> bool:
+        """下三角行列かどうか
+
+        Returns
+        -------
+        bool
+            下三角行列かどうか
+        """
+        for row in range(self.rows()):
+            for column in range(self.columns()):
+                if row < column and self.matrix[row][column] != 0:
+                    return False
+        return True
+
+    def is_diagronal_matrix(self) -> bool:
+        """下三角行列かどうか
+
+        Returns
+        -------
+        bool
+            下三角行列かどうか
+        """
+        for row in range(self.rows()):
+            for column in range(self.columns()):
+                if row != column and self.matrix[row][column] != 0:
+                    return False
+        return True
