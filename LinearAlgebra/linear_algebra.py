@@ -9,7 +9,7 @@ class Matrix:
 
     matrix: list[list[int | float]]
 
-    def __init__(self, matrix: list[list[float]]) -> None:
+    def __init__(self, matrix: list[list[int | float]]) -> None:
         """コンストラクタ
 
         Parameters
