@@ -7,7 +7,7 @@ from linear_algebra import Matrix, SquareMatrix
 
 
 # equalのtest
-class EqualTestCase(unittest.TestCase):
+class MatrixTestCase(unittest.TestCase):
     matrix_list = [[0, 1], [2, 3]]
     not_equal_matrix_list = [[0, 1, 2], [3, 4, 5]]
 
@@ -16,33 +16,32 @@ class EqualTestCase(unittest.TestCase):
     not_equal_matrix = Matrix(not_equal_matrix_list)
 
     def test_equal(self):
+        """同じ行列を与えた時にequal関数がtrueを返すかテスト"""
         self.assertTrue(self.matrix.equal(self.equal_matrix))
 
     def test_not_equal(self):
+        """異なる行列を与えた時にequal関数がfalseを返すかテスト"""
         self.assertFalse(self.matrix.equal(self.not_equal_matrix))
 
-
-# create_zero_matrixのtest
-class ZeroMatrixTestCase(unittest.TestCase):
     zero_matrix = Matrix([[0, 0], [0, 0], [0, 0]])
     rows = 2
     columns = 3
 
-    def test_zero_matrix(self):
+    def test_create_zero_matrix(self):
+        """想定した零行列が作成されるかテスト"""
         self.assertEqual(
             self.zero_matrix, Matrix.create_zero_matrix(self.rows, self.columns)
         )
 
-
-# is_square_matrixのテスト
-class IsSquareMatrixTestCase(unittest.TestCase):
     square_matrix = Matrix([[0, 1], [2, 3]])
     not_square_matrix = Matrix([[0, 1], [2, 3], [4, 5]])
 
     def test_is_square_matrix(self):
+        """正方行列を与えた時trueを返すかテスト"""
         self.assertTrue(self.square_matrix.is_square_matrix())
 
     def test_is_not_square_matrix(self):
+        """正方行列以外を与えた時falseを返すかテスト"""
         self.assertFalse(self.not_square_matrix.is_square_matrix())
 
 
