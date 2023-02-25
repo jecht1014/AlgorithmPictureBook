@@ -20,3 +20,14 @@ class EqualTestCase(unittest.TestCase):
 
     def test_not_equal(self):
         self.assertFalse(matrix.equal(not_equal_matrix))
+
+
+# zero_matrixのtest
+zero_matrix = Matrix([[0, 0], [0, 0], [0, 0]])
+rows = 2
+columns = 3
+
+
+class ZeroMatrixTestCase(unittest.TestCase):
+    def test_zero_matrix(self):
+        self.assertEqual(zero_matrix, Matrix.zero_matrix(rows, columns))
