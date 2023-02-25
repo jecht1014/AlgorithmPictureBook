@@ -51,6 +51,22 @@ class Matrix:
         """
         return Matrix([[0 for _ in range(rows)] for _ in range(columns)])
 
+    def add(self, target_matrix: Matrix) -> Matrix:
+        if not (
+            self.rows() == target_matrix.rows()
+            and self.columns() == target_matrix.columns()
+        ):
+            raise ValueError("行と列の数が等しくありません")
+
+        # 結果を入れる行列の初期化
+        result: Matrix = Matrix.create_zero_matrix(self.rows(), self.columns())
+        for row in range(self.rows()):
+            for column in range(self.columns()):
+                result.matrix[row][column] = (
+                    self.matrix[row][column] + target_matrix.matrix[row][column]
+                )
+        return result
+
     def equal(self, matrix: Matrix) -> bool:
         """行列が等しいか
 
@@ -133,7 +149,7 @@ class SquareMatrix(Matrix):
         """
         super().__init__(matrix)
         if not self.is_square_matrix():
-            raise TypeError(
+            raise ValueError(
                 "対象の行列が正方行列ではありません: rows=", self.rows(), ", columns=", self.columns()
             )
 

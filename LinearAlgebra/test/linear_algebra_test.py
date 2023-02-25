@@ -44,6 +44,20 @@ class MatrixTestCase(unittest.TestCase):
         """正方行列以外を与えた時falseを返すかテスト"""
         self.assertFalse(self.not_square_matrix.is_square_matrix())
 
+    def test_add(self):
+        """正常に足し算が行われるかテスト"""
+        matrix = Matrix([[0, 1], [2, 3]])
+        target_matrix = Matrix([[1, 3], [5, 7]])
+        expected_matrix = Matrix([[1, 4], [7, 10]])
+        self.assertEqual(matrix.add(target_matrix), expected_matrix)
+
+    def test_add_value_exception(self):
+        """行数か列数が一致しない時に例外がスローされるかテスト"""
+        matrix = Matrix([[0, 1], [2, 3]])
+        target_matrix = Matrix([[1, 3], [5, 7], [9, 11]])
+        with self.assertRaises(ValueError):
+            matrix.add(target_matrix)
+
 
 # 正方行列クラスのテスト
 class SquareMatrixTestCase(unittest.TestCase):
