@@ -81,3 +81,10 @@ class DiagonalElementTestCase(unittest.TestCase):
     def test_is_not_diagronal_matrix(self):
         """対角行列ではない行列を与えた時にfalseを返すかテスト"""
         self.assertTrue(self.diagonal_matrix.is_diagronal_matrix())
+
+    identity_matrix = SquareMatrix.create_identity_matrix(3)
+    expected_identity_matrix = Matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+
+    def test_create_identity_matrix(self):
+        """単位行列が作成されるか"""
+        self.assertEqual(self.identity_matrix, self.expected_identity_matrix)

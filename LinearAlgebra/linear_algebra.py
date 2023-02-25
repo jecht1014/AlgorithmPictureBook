@@ -137,6 +137,24 @@ class SquareMatrix(Matrix):
                 "対象の行列が正方行列ではありません: rows=", self.rows(), ", columns=", self.columns()
             )
 
+    def create_identity_matrix(size: int) -> SquareMatrix:
+        """単位行列を作成
+
+        Parameters
+        ----------
+        size : int
+            _description_
+
+        Returns
+        -------
+        SquareMatrix
+            _description_
+        """
+        matrix: Matrix = Matrix.zero_matrix(size, size)
+        for i in range(size):
+            matrix.matrix[i][i] = 1
+        return matrix.to_square_matrix()
+
     def diagonal_element(self) -> list[int | float]:
         """対角成分
 
