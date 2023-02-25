@@ -46,9 +46,8 @@ class IsSquareMatrixTestCase(unittest.TestCase):
         self.assertFalse(self.not_square_matrix.is_square_matrix())
 
 
-# 正方行列クラス
-# diagonal_elementのテスト
-class DiagonalElementTestCase(unittest.TestCase):
+# 正方行列クラスのテスト
+class SquareMatrixTestCase(unittest.TestCase):
     square_matrix = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]).to_square_matrix()
     diagonal_element = [1, 5, 9]
 
