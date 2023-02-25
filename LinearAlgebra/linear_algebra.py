@@ -34,7 +34,7 @@ class Matrix:
         """
         return self.matrix == other.matrix
 
-    def zero_matrix(rows: int, columns: int) -> Matrix:
+    def create_zero_matrix(rows: int, columns: int) -> Matrix:
         """零行列を作成
 
         Parameters
@@ -150,7 +150,7 @@ class SquareMatrix(Matrix):
         SquareMatrix
             _description_
         """
-        matrix: Matrix = Matrix.zero_matrix(size, size)
+        matrix: Matrix = Matrix.create_zero_matrix(size, size)
         for i in range(size):
             matrix.matrix[i][i] = 1
         return matrix.to_square_matrix()

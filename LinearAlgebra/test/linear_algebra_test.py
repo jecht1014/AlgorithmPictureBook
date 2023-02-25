@@ -22,14 +22,16 @@ class EqualTestCase(unittest.TestCase):
         self.assertFalse(self.matrix.equal(self.not_equal_matrix))
 
 
-# zero_matrixのtest
+# create_zero_matrixのtest
 class ZeroMatrixTestCase(unittest.TestCase):
     zero_matrix = Matrix([[0, 0], [0, 0], [0, 0]])
     rows = 2
     columns = 3
 
     def test_zero_matrix(self):
-        self.assertEqual(self.zero_matrix, Matrix.zero_matrix(self.rows, self.columns))
+        self.assertEqual(
+            self.zero_matrix, Matrix.create_zero_matrix(self.rows, self.columns)
+        )
 
 
 # is_square_matrixのテスト
