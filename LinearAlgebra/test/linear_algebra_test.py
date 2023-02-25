@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(".."))
-from linear_algebra import Matrix
+from linear_algebra import Matrix, SquareMatrix
 
 
 # equalのtest
@@ -42,3 +42,13 @@ class IsSquareMatrixTestCase(unittest.TestCase):
 
     def test_is_not_square_matrix(self):
         self.assertFalse(self.not_square_matrix.is_square_matrix())
+
+
+# 正方行列クラス
+# diagonal_elementのテスト
+class DiagonalElementTestCase(unittest.TestCase):
+    square_matrix = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]).to_square_matrix()
+    diagonal_element = [1, 5, 9]
+
+    def test_diagonal_element(self):
+        self.assertEqual(self.square_matrix.diagonal_element(), self.diagonal_element)
