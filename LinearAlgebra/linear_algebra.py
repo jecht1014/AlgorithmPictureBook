@@ -51,7 +51,7 @@ class Matrix:
         """
         return Matrix([[0 for _ in range(rows)] for _ in range(columns)])
 
-    def add(self, target_matrix: Matrix) -> Matrix:
+    def plus(self, target_matrix: Matrix) -> Matrix:
         if not (
             self.rows() == target_matrix.rows()
             and self.columns() == target_matrix.columns()
