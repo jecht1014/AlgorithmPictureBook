@@ -67,6 +67,22 @@ class Matrix:
                 )
         return result
 
+    def minus(self, target_matrix: Matrix) -> Matrix:
+        if not (
+            self.rows() == target_matrix.rows()
+            and self.columns() == target_matrix.columns()
+        ):
+            raise ValueError("行と列の数が等しくありません")
+
+        # 結果を入れる行列の初期化
+        result: Matrix = Matrix.create_zero_matrix(self.rows(), self.columns())
+        for row in range(self.rows()):
+            for column in range(self.columns()):
+                result.matrix[row][column] = (
+                    self.matrix[row][column] - target_matrix.matrix[row][column]
+                )
+        return result
+
     def equal(self, matrix: Matrix) -> bool:
         """行列が等しいか
 

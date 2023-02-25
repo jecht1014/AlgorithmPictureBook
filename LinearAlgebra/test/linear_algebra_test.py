@@ -58,6 +58,20 @@ class MatrixTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             matrix.plus(target_matrix)
 
+    def test_minus(self):
+        """正常に引き算が行われるかテスト"""
+        matrix = Matrix([[0, 1], [2, 3]])
+        target_matrix = Matrix([[1, 3], [5, 7]])
+        expected_matrix = Matrix([[-1, -2], [-3, -4]])
+        self.assertEqual(matrix.minus(target_matrix), expected_matrix)
+
+    def test_minus_value_exception(self):
+        """行数か列数が一致しない時に例外がスローされるかテスト"""
+        matrix = Matrix([[0, 1], [2, 3]])
+        target_matrix = Matrix([[1, 3], [5, 7], [9, 11]])
+        with self.assertRaises(ValueError):
+            matrix.minus(target_matrix)
+
 
 # 正方行列クラスのテスト
 class SquareMatrixTestCase(unittest.TestCase):
