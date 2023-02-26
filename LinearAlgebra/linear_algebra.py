@@ -83,6 +83,13 @@ class Matrix:
                 )
         return result
 
+    def scalar_multiply_by(self, num: int | float):
+        result: Matrix = Matrix.create_zero_matrix(self.rows(), self.columns())
+        for row in range(self.rows()):
+            for column in range(self.columns()):
+                result.matrix[row][column] = self.matrix[row][column] * num
+        return result
+
     def equal(self, matrix: Matrix) -> bool:
         """行列が等しいか
 

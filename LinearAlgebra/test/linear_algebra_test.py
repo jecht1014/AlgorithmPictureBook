@@ -72,6 +72,13 @@ class MatrixTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             matrix.minus(target_matrix)
 
+    def test_minus(self):
+        """正常にスカラー積が行われるかテスト"""
+        matrix = Matrix([[0, 1], [2, 3]])
+        num = 2
+        expected_matrix = Matrix([[0, 2], [4, 6]])
+        self.assertEqual(matrix.scalar_multiply_by(num), expected_matrix)
+
 
 # 正方行列クラスのテスト
 class SquareMatrixTestCase(unittest.TestCase):
