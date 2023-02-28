@@ -79,6 +79,20 @@ class MatrixTestCase(unittest.TestCase):
         expected_matrix = Matrix([[0, 2], [4, 6]])
         self.assertEqual(matrix.scalar_multiply_by(num), expected_matrix)
 
+    def test_multiply_by_exception(self):
+        """行列の行と列の数が合わず積を出せない時のエラーテスト"""
+        matrix = Matrix([[0, 1], [2, 3]])
+        target_matrix = Matrix([[0, 1]])
+        with self.assertRaises(ValueError):
+            matrix.multiply_by(target_matrix)
+
+    def test_multiply_by(self):
+        """正常に行列積が行われるかテスト"""
+        matrix = Matrix([[1, 1, 1], [1, 2, 1], [1, 1, 3]])
+        target_matrix = Matrix([[2, 0, 0, 5], [0, 0, 4, 2], [0, 3, 0, 1]])
+        expected_result = Matrix([[2, 3, 4, 8], [2, 3, 8, 10], [2, 9, 4, 10]])
+        self.assertEqual(matrix.multiply_by(target_matrix), expected_result)
+
 
 # 正方行列クラスのテスト
 class SquareMatrixTestCase(unittest.TestCase):

@@ -90,6 +90,33 @@ class Matrix:
                 result.matrix[row][column] = self.matrix[row][column] * num
         return result
 
+    def multiply_by(self, matrix: Matrix):
+        """行列積を行う
+
+        Parameters
+        ----------
+        matrix : Matrix
+            演算対象の行列
+
+        Raises
+        ------
+        ValueError
+            行列の行と列の数が一致しない時のエラー
+        """
+        if self.columns() != matrix.rows():
+            raise ValueError("行と列の数が等しくありません")
+
+        result: Matrix = Matrix.create_zero_matrix(self.rows(), matrix.columns())
+        print(result.to_string())
+        for row in range(self.rows()):
+            for column in range(matrix.columns()):
+                print(row, column)
+                for calc in range(self.columns()):
+                    result.matrix[row][column] += (
+                        self.matrix[row][calc] * matrix.matrix[calc][column]
+                    )
+        return result
+
     def equal(self, matrix: Matrix) -> bool:
         """行列が等しいか
 
