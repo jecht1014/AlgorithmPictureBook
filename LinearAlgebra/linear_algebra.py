@@ -49,7 +49,7 @@ class Matrix:
         Matrix
             rows行, columns列の0行列
         """
-        return Matrix([[0 for _ in range(rows)] for _ in range(columns)])
+        return Matrix([[0 for _ in range(columns)] for _ in range(rows)])
 
     def plus(self, target_matrix: Matrix) -> Matrix:
         if not (

@@ -23,7 +23,7 @@ class MatrixTestCase(unittest.TestCase):
         """異なる行列を与えた時にequal関数がfalseを返すかテスト"""
         self.assertFalse(self.matrix.equal(self.not_equal_matrix))
 
-    zero_matrix = Matrix([[0, 0], [0, 0], [0, 0]])
+    zero_matrix = Matrix([[0, 0, 0], [0, 0, 0]])
     rows = 2
     columns = 3
 
