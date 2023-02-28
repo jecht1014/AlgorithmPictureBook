@@ -52,6 +52,23 @@ class Matrix:
         return Matrix([[0 for _ in range(columns)] for _ in range(rows)])
 
     def plus(self, target_matrix: Matrix) -> Matrix:
+        """行列の加算を行う
+
+        Parameters
+        ----------
+        target_matrix : Matrix
+            足す方の行列
+
+        Returns
+        -------
+        Matrix
+            演算結果
+
+        Raises
+        ------
+        ValueError
+            行と列の数が異なり演算できない時のエラー
+        """
         if not (
             self.rows() == target_matrix.rows()
             and self.columns() == target_matrix.columns()
@@ -68,6 +85,23 @@ class Matrix:
         return result
 
     def minus(self, target_matrix: Matrix) -> Matrix:
+        """行列の減算を行う
+
+        Parameters
+        ----------
+        target_matrix : Matrix
+            引く方の行列
+
+        Returns
+        -------
+        Matrix
+            演算結果
+
+        Raises
+        ------
+        ValueError
+            行と列の数が異なり演算できない時のエラー
+        """
         if not (
             self.rows() == target_matrix.rows()
             and self.columns() == target_matrix.columns()
@@ -84,6 +118,18 @@ class Matrix:
         return result
 
     def scalar_multiply_by(self, num: int | float):
+        """スカラー積を行う
+
+        Parameters
+        ----------
+        num : int | float
+            掛ける数
+
+        Returns
+        -------
+        _type_
+            演算結果
+        """
         result: Matrix = Matrix.create_zero_matrix(self.rows(), self.columns())
         for row in range(self.rows()):
             for column in range(self.columns()):
@@ -97,6 +143,11 @@ class Matrix:
         ----------
         matrix : Matrix
             演算対象の行列
+
+        Returns
+        -------
+        _type_
+            演算結果
 
         Raises
         ------
