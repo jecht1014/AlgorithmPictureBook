@@ -23,6 +23,7 @@ class FrequencyTable:
         self.num_of_class = num_of_class
         self.max_row_data = max(row_data)
         self.min_row_data = min(row_data)
+        self.length = len(row_data)
 
         data = {
             'number': [i for i in range(1, self.num_of_class+1)],
@@ -41,6 +42,9 @@ class FrequencyTable:
 
         # 累積度数の追加
         self.frequency_table['cumulative_frequency'] = self.frequency_table['frequency'].cumsum()
+
+        # 比率の追加
+        self.frequency_table['ratio'] = self.frequency_table['frequency']/self.length
     
     def range(self) -> float:
         """
