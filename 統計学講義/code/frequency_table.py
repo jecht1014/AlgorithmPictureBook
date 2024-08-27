@@ -68,5 +68,8 @@ class FrequencyTable:
         plt.show()
     
     def plot_frequency_polygon(self) -> None:
+        """
+        度数多角形を描画する関数
+        """
         self.frequency_table.plot("class_mark", "frequency")
         plt.show()
