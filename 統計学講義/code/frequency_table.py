@@ -38,6 +38,9 @@ class FrequencyTable:
                     break
 
         self.frequency_table = pd.DataFrame(data).set_index('number')
+
+        # 累積度数の追加
+        self.frequency_table['cumulative_frequency'] = self.frequency_table['frequency'].cumsum()
     
     def range(self) -> float:
         """
