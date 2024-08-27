@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 class FrequencyTable:
     """
@@ -48,3 +49,7 @@ class FrequencyTable:
             データの範囲
         """
         return self.max_row_data-self.min_row_data
+
+    def plot_histogram(self) -> None:
+        self.frequency_table.plot.bar("class_mark", "frequency", width=1)
+        plt.show()

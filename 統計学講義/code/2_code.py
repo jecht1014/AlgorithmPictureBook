@@ -1,6 +1,7 @@
 import csv
 from pathlib import Path
 import frequency_table
+import matplotlib.pyplot as plt
 
 parent = Path(__file__).resolve().parent
 row_data = []
@@ -10,4 +11,4 @@ with open(parent.joinpath('sample_data/StatData01_1.csv')) as f:
     row_data = [int(row) for row in row_data]
 
 frequency_table = frequency_table.FrequencyTable(row_data, 200, 11, 2200)
-print(frequency_table.range())
+frequency_table.plot_histogram()
