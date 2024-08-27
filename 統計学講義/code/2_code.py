@@ -13,3 +13,4 @@ with open(parent.joinpath('sample_data/StatData01_1.csv')) as f:
 frequency_table = frequency_table.FrequencyTable(row_data, 200, 11, 2200)
 frequency_table.plot_histogram()
 frequency_table.plot_frequency_polygon()
+frequency_table.plot_cumulative_ratio_chart()

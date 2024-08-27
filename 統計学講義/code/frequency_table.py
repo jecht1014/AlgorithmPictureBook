@@ -73,3 +73,10 @@ class FrequencyTable:
         """
         self.frequency_table.plot("class_mark", "frequency")
         plt.show()
+    
+    def plot_cumulative_ratio_chart(self) -> None:
+        """
+        累積比率図を描画する関数
+        """
+        self.frequency_table.plot("class_mark", "cumulative_ratio")
+        plt.show()
