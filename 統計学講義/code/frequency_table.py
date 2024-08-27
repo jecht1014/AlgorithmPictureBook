@@ -51,5 +51,12 @@ class FrequencyTable:
         return self.max_row_data-self.min_row_data
 
     def plot_histogram(self) -> None:
+        """
+        ヒストグラムを描画する関数
+        """
         self.frequency_table.plot.bar("class_mark", "frequency", width=1)
+        plt.show()
+    
+    def plot_frequency_polygon(self) -> None:
+        self.frequency_table.plot("class_mark", "frequency")
         plt.show()
