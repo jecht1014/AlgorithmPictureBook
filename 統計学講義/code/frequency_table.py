@@ -45,6 +45,9 @@ class FrequencyTable:
 
         # 比率の追加
         self.frequency_table['ratio'] = self.frequency_table['frequency']/self.length
+
+        # 累積比率の追加
+        self.frequency_table['cumulative_ratio'] = self.frequency_table['cumulative_frequency']/self.length
     
     def range(self) -> float:
         """
