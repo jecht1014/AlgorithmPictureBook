@@ -80,3 +80,14 @@ class FrequencyTable:
         """
         self.frequency_table.plot("class_mark", "cumulative_ratio")
         plt.show()
+
+    def average(self) -> float:
+        """
+        平均の計算を行う関数
+
+        Returns
+        -------
+        float
+            平均
+        """
+        return (self.frequency_table['class_mark']*self.frequency_table['frequency']).sum()/self.length
