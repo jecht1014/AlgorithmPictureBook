@@ -40,6 +40,10 @@ class FrequencyTable:
 
         self.frequency_table = pd.DataFrame(data).set_index('number')
 
+        #下限値と上限値を追加
+        self.frequency_table['lower_limit'] = self.frequency_table['class_mark']-class_interval/2
+        self.frequency_table['upper_limit'] = self.frequency_table['class_mark']+class_interval/2
+
         # 累積度数の追加
         self.frequency_table['cumulative_frequency'] = self.frequency_table['frequency'].cumsum()
 
@@ -78,7 +82,7 @@ class FrequencyTable:
         """
         累積比率図を描画する関数
         """
-        self.frequency_table.plot("class_mark", "cumulative_ratio")
+        self.frequency_table.plot("upper_limit", "cumulative_ratio")
         plt.show()
 
     def average(self) -> float:
