@@ -170,3 +170,13 @@ class FrequencyTable:
         """
         return self.unbiased_variance() ** 0.5
     
+    def mean_deviation(self) -> float:
+        """
+        平均偏差の計算を行う関数
+
+        Returns
+        -------
+        float
+            平均偏差
+        """
+        return ((self.frequency_table['class_mark']-self.mean()).abs()*self.frequency_table['frequency']).sum()/self.length
