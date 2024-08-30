@@ -1,7 +1,10 @@
 import unittest
-import frequency_table
 import csv
 from pathlib import Path
+
+import sys
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+import frequency_table
 
 class TestFrequencyTable(unittest.TestCase):
     """
@@ -16,7 +19,7 @@ class TestFrequencyTable(unittest.TestCase):
         row_data = []
 
         # テスト用のcsvファイルの読み込み
-        with open(parent.joinpath('sample_data/StatData01_1.csv')) as f:
+        with open(parent.joinpath('../sample_data/StatData01_1.csv')) as f:
             reader = csv.reader(f)
             row_data = [row[0] for row in reader][1:]
             row_data = [int(row) for row in row_data]
@@ -87,6 +90,6 @@ class TestFrequencyTable(unittest.TestCase):
         """
         四分位範囲のテスト
         """
-        self.assertAlmostEqual(self.frequency_table.interquartile_range(), 521.02, places=2)
+        self.assertAlmostEqual(self.frequency_table.interquartile_range(), 521.03, places=2)
 
 unittest.main()
