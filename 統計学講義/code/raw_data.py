@@ -1,5 +1,4 @@
 import pandas as pd
-from typing import Type
 
 class RawData:
     """
@@ -91,3 +90,15 @@ class RawData:
         """
         
         return self.unbiased_variance()**0.5
+
+    def z_score_normalization(self) -> 'RawData':
+        """
+        Zスコア正規化を行う関数
+        
+        Returns
+        -------
+        Type[RawData]
+            Zスコア正規化後のRawData
+        """
+        z = [(i-self.mean())/self.standard_deviation() for i in self.raw_data]
+        return RawData(z)

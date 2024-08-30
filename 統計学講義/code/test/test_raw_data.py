@@ -67,5 +67,13 @@ class TestRawData(unittest.TestCase):
         不偏標準偏差のテスト
         """
         self.assertAlmostEqual(self.raw_data.unbiased_standard_deviation(), 379.36*(100/99)**0.5, places=2)
+    
+    def test_z_score_normalization(self):
+        """
+        Zスコアの正規化のテスト
+        """
+        z = self.raw_data.z_score_normalization()
+        self.assertAlmostEqual(z.mean(), 0, places=10)
+        self.assertAlmostEqual(z.standard_deviation(), 1, places=10)
 
 unittest.main()
