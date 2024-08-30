@@ -97,7 +97,7 @@ class RawData:
         
         Returns
         -------
-        Type[RawData]
+        RawData
             Zスコア正規化後のRawData
         """
         z = [(i-self.mean())/self.standard_deviation() for i in self.raw_data]
