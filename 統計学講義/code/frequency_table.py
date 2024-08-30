@@ -125,3 +125,25 @@ class FrequencyTable:
 
         # 最頻値の計算
         return v['lower_limit'][max_idx] + self.class_interval * (v['frequency'][max_idx]-v['frequency'][max_idx-1]) / ((v['frequency'][max_idx]-v['frequency'][max_idx-1]) + (v['frequency'][max_idx]-v['frequency'][max_idx+1]))
+    
+    def variance(self) -> float:
+        """
+        分散の計算を行う関数
+
+        Returns
+        -------
+        float
+            分散
+        """
+        return ((self.frequency_table['class_mark']-self.average())**2*self.frequency_table['frequency']).sum()/self.length
+    
+    def unbiased_variance(self) -> float:
+        """
+        不偏分散の計算を行う関数
+
+        Returns
+        -------
+        float
+            分散
+        """
+        return ((self.frequency_table['class_mark']-self.average())**2*self.frequency_table['frequency']).sum()/(self.length-1)
