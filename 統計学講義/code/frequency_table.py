@@ -107,3 +107,21 @@ class FrequencyTable:
         """
         v = self.frequency_table.query('cumulative_ratio > 0.5')[0:1]
         return (v['lower_limit'] + self.class_interval * (self.length/2.0 - (v['cumulative_frequency']-v['frequency'])) / v['frequency']).iloc[-1]
+    
+    def mode(self) -> float:
+        """
+        最頻値の計算を行う関数
+
+        Returns
+        -------
+        float
+            最頻値
+        """
+        # 最大値のインデックス
+        max_idx = self.frequency_table['frequency'].idxmax()
+
+        # 最大値の前後のデータを変数に格納
+        v = self.frequency_table.loc[max_idx-1:max_idx+1]
+
+        # 最頻値の計算
+        return v['lower_limit'][max_idx] + self.class_interval * (v['frequency'][max_idx]-v['frequency'][max_idx-1]) / ((v['frequency'][max_idx]-v['frequency'][max_idx-1]) + (v['frequency'][max_idx]-v['frequency'][max_idx+1]))
