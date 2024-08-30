@@ -8,7 +8,7 @@ import raw_data
 
 class TestRawData(unittest.TestCase):
     """
-    frequency_table.pyのテスト
+    raw_data.pyのテスト
     """
 
     def setUp(self) -> None:
