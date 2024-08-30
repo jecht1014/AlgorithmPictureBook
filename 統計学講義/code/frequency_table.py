@@ -97,5 +97,13 @@ class FrequencyTable:
         return (self.frequency_table['class_mark']*self.frequency_table['frequency']).sum()/self.length
     
     def median(self) -> float:
+        """
+        中央値の計算を行う関数
+
+        Returns
+        -------
+        float
+            中央値
+        """
         v = self.frequency_table.query('cumulative_ratio >= 0.5')[0:1]
         return (v['lower_limit'] + self.class_interval * (self.length/2 - (v['cumulative_ratio']-v['ratio'])) / v['frequency']).iloc[-1]
