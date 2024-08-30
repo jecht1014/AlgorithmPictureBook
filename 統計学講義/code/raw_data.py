@@ -1,11 +1,20 @@
 import pandas as pd
+from typing import Type, Union
 
 class RawData:
     """
     粗データを扱うクラス
     """
     
-    def __init__(self, raw_data: list):
+    def __init__(self, raw_data: list[Union[int|float]]):
+        """
+        コンストラクタ
+
+        Parameters
+        ----------
+        raw_data : list[int|float]
+            粗データ
+        """
         self.raw_data = raw_data
         self.length = len(raw_data)
     
