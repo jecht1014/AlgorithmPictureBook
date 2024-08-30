@@ -43,4 +43,29 @@ class TestRawData(unittest.TestCase):
         odd_raw_data = raw_data.RawData([1, 2, 3, 4, 5])
         self.assertEqual(odd_raw_data.median(), 3)
 
+
+    def test_variance(self):
+        """
+        分散のテスト
+        """
+        self.assertAlmostEqual(self.raw_data.variance(), 143911.96, places=2)
+
+    def test_unbiased_variance(self):
+        """
+        不偏分散のテスト
+        """
+        self.assertAlmostEqual(self.raw_data.unbiased_variance(), 143911.96*(100/99), places=2)
+    
+    def test_standard_deviation(self):
+        """
+        標準偏差のテスト
+        """
+        self.assertAlmostEqual(self.raw_data.standard_deviation(), 379.36, places=2)
+    
+    def test_unbiased_standard_deviation(self):
+        """
+        不偏標準偏差のテスト
+        """
+        self.assertAlmostEqual(self.raw_data.unbiased_standard_deviation(), 379.36*(100/99)**0.5, places=2)
+
 unittest.main()

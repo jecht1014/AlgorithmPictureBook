@@ -34,3 +34,51 @@ class RawData:
             return (sorted_raw_data[self.length//2] + sorted_raw_data[self.length//2-1])/2
         else:
             return sorted_raw_data[self.length//2]
+        
+    def variance(self) -> float:
+        """
+        分散の計算を行う関数
+
+        Returns
+        -------
+        float
+            分散
+        """
+        
+        return sum([(i-self.mean())**2 for i in self.raw_data])/(self.length)
+    
+    def unbiased_variance(self) -> float:
+        """
+        不偏分散の計算を行う関数
+
+        Returns
+        -------
+        float
+            分散
+        """
+        
+        return sum([(i-self.mean())**2 for i in self.raw_data])/(self.length-1)
+
+    def standard_deviation(self) -> float:
+        """
+        標準偏差の計算を行う関数
+
+        Returns
+        -------
+        float
+            標準偏差
+        """
+        
+        return self.variance()**0.5
+
+    def unbiased_standard_deviation(self) -> float:
+        """
+        不偏標準偏差の計算を行う関数
+
+        Returns
+        -------
+        float
+            標準偏差
+        """
+        
+        return self.unbiased_variance()**0.5
