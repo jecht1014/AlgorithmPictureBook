@@ -1,12 +1,12 @@
 import pandas as pd
-from typing import Type, Union
+from typing import Type
 
 class RawData:
     """
     粗データを扱うクラス
     """
     
-    def __init__(self, raw_data: list[Union[int|float]]):
+    def __init__(self, raw_data: list[int|float]):
         """
         コンストラクタ
 
