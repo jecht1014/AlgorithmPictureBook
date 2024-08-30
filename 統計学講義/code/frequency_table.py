@@ -147,3 +147,26 @@ class FrequencyTable:
             分散
         """
         return ((self.frequency_table['class_mark']-self.average())**2*self.frequency_table['frequency']).sum()/(self.length-1)
+
+    def standard_deviation(self) -> float:
+        """
+        標準偏差の計算を行う関数
+
+        Returns
+        -------
+        float
+            標準偏差
+        """
+        return self.variance() ** 0.5
+    
+    def unbiased_standard_deviation(self) -> float:
+        """
+        不偏標準偏差の計算を行う関数
+
+        Returns
+        -------
+        float
+            標準偏差
+        """
+        return self.unbiased_variance() ** 0.5
+    
