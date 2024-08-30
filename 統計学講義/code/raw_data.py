@@ -1,5 +1,3 @@
-import pandas as pd
-
 class RawData:
     """
     粗データを扱うクラス
