@@ -105,8 +105,7 @@ class FrequencyTable:
         float
             中央値
         """
-        v = self.frequency_table.query('cumulative_ratio > 0.5')[0:1]
-        return (v['lower_limit'] + self.class_interval * (self.length/2.0 - (v['cumulative_frequency']-v['frequency'])) / v['frequency']).iloc[-1]
+        return self.quantile(2)
     
     def mode(self) -> float:
         """
