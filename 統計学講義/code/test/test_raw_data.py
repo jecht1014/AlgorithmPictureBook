@@ -31,5 +31,16 @@ class TestRawData(unittest.TestCase):
         平均のテスト
         """
         self.assertEqual(self.raw_data.mean(), 3160.2)
+    
+    def test_median(self):
+        """
+        中央値のテスト
+        """
+        # 偶数個の場合
+        self.assertEqual(self.raw_data.median(), 3160)
+
+        # 奇数個の場合
+        odd_raw_data = raw_data.RawData([1, 2, 3, 4, 5])
+        self.assertEqual(odd_raw_data.median(), 3)
 
 unittest.main()

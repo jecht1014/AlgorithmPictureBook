@@ -19,3 +19,18 @@ class RawData:
             平均
         """
         return sum(self.raw_data)/self.length
+    
+    def median(self) -> float:
+        """
+        中央値の計算を行う関数
+
+        Returns
+        -------
+        float
+            中央値
+        """
+        sorted_raw_data = sorted(self.raw_data)
+        if self.length % 2 == 0:
+            return (sorted_raw_data[self.length//2] + sorted_raw_data[self.length//2-1])/2
+        else:
+            return sorted_raw_data[self.length//2]
