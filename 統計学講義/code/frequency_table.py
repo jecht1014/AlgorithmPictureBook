@@ -180,3 +180,35 @@ class FrequencyTable:
             平均偏差
         """
         return ((self.frequency_table['class_mark']-self.mean()).abs()*self.frequency_table['frequency']).sum()/self.length
+    
+    def quantile(self, q: int) -> float:
+        """
+        四分位点の計算を行う関数
+
+        Parameters
+        ----------
+        q : int
+            第n四分位点か(n=1, 2, 3)
+
+        Returns
+        -------
+        float
+            四分位点
+        """
+        # qが1, 2, 3以外の場合
+        if q not in [1, 2, 3]:
+            raise ValueError("q must be 1, 2, or 3")
+
+        v = self.frequency_table.query('cumulative_ratio > {}'.format(0.25*q))[0:1]
+        return (v['lower_limit'] + self.class_interval * (self.length*(q/4.0) - (v['cumulative_frequency']-v['frequency'])) / v['frequency']).iloc[-1]
+    
+    def interquartile_range(self) -> float:
+        """
+        四分位範囲の計算を行う関数
+
+        Returns
+        -------
+        float
+            四分位範囲
+        """
+        return self.quantile(3) - self.quantile(1)
