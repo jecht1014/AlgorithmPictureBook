@@ -32,4 +32,10 @@ class TestRawData2(unittest.TestCase):
         """
         self.assertAlmostEqual(self.raw_data2.covariance(), 424.24, places=2)
 
+    def test_correlation_coefficient(self):
+        """
+        相関係数のテスト
+        """
+        self.assertAlmostEqual(self.raw_data2.correlation_coefficient(), 0.783, places=2)
+
 unittest.main()
